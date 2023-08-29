@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!-- saved from url=(0075)https://www.csc.lsu.edu/~qywang/CSC7610/HTMLExercise/Homework2-example.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>Motorcycle running</title>
+</head>
+<body>
+
+<button id="start-button">Start</button>
+<button id="speed-button">Go Faster!</button>
+<button id="stop-button">Stop</button>
+<div id="info"></div>
+
+<img style="position:absolute; left: 0px; top: 80px;" src="../../Motorcycle%20running_files/motorCycle.gif">
+
+<script>
+    var movePixels = 10;
+    var delayMs = 50;
+    var catTimer = null;
+
+    const startBtn = document.getElementById("start-button");
+    const stopBtn = document.getElementById("stop-button");
+    const speedBtn = document.getElementById("speed-button");
+
+    if(startBtn !== null){
+        startBtn.addEventListener("click", startRunning);
+    }
+
+    if(stopBtn !== null){
+        // disabled stop btn at the onset
+        stopBtn.disabled = true;
+        stopBtn.addEventListener("click", stopRunning);
+    }
+
+    if(speedBtn !== null){
+        // disabled speed btn at the onset
+        speedBtn.disabled = true;
+        speedBtn.addEventListener("click", speedRunning);
+    }
+
+    function motorCycleRunning() {
+        var img = document.getElementsByTagName('img')[0];
+        var currentLeft = parseInt(img.style.left);
+        img.style.left = (currentLeft + movePixels) + 'px';
+        if (currentLeft > (window.innerWidth-img.width)) {
+            img.style.left = '0px';
+        }
+    }
+    function startRunning() {
+        if(startBtn !== null){
+            startBtn.disabled = true;
+        }
+        // in case the stop is disabled, enable it to stop again
+        if(stopBtn !== null){
+            stopBtn.disabled = false;
+        }
+        // in case the speed is disabled, enable it to make faster
+        if(speedBtn !== null){
+            speedBtn.disabled = false;
+        }
+        catTimer = window.setInterval(motorCycleRunning, delayMs);
+    }
+
+    function stopRunning(){
+        // reset speed variables
+        movePixels = 10;
+        delayMs = 50;
+
+        if(stopBtn !== null){
+            stopBtn.disabled = true;
+        }
+        // in case the start is disabled, enable it to run again
+        if(startBtn !== null){
+            startBtn.disabled = false;
+        }
+        // in case the speed is enabled, disable it to stop clicking on stop
+        if(speedBtn !== null){
+            speedBtn.disabled = true;
+        }
+        if(catTimer !== null){
+            window.clearInterval(catTimer);
+        }
+    }
+
+    function speedRunning(){
+        delayMs = 25;
+        movePixels = 20;
+    }
+
+</script>
+</body>
