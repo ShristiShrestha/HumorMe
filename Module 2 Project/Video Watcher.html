@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!-- saved from url=(0081)https://www.csc.lsu.edu/~qywang/CSC7610/HTMLExercise//lecture18/VideoWatcher.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>Video Watcher</title>
+  <link rel="stylesheet" type="text/css" href="./Video Watcher_files/bootstrap.css">
+  <style type="text/css">
+  /* This puts titles always on a separate line from thumbnails */
+  #videos-list img {
+    display: block;
+  }
+  </style>
+ </head>
+ <body data-new-gr-c-s-check-loaded="14.1122.0" data-gr-ext-installed="">
+
+<div class="container">
+ 
+ <div class="row">
+   <div class="span12">
+    <h2 class="page-header">Best Videos Ever </h2>
+   </div>
+ </div>
+ 
+ <div class="row">
+   <div class="span3">
+     <ul id="videos-list">
+    <li><a>Trip through the 80s<img src="./Video Watcher_files/default.jpg"></a></li><li><a>Otters Holding Hands<img src="./Video Watcher_files/default(1).jpg"></a></li><li><a>The Ooooh Cat<img src="./Video Watcher_files/default(2).jpg"></a></li></ul>
+   </div>
+   <div class="span9" id="video-watcher">
+   </div>
+ </div>
+</div>
+
+ <script type="text/javascript" src="./Video Watcher_files/youtube.js.download"></script>
+ <script type="text/javascript" src="./Video Watcher_files/jquery.js.download"></script>
+ <script>
+
+ var videos = [
+  {"youtubeId": "TddFnTB_7IM",
+    "title": "Trip through the 80s"
+  },
+  {"youtubeId": "epUk3T2Kfno",
+    "title": "Otters Holding Hands"
+  },
+  {"youtubeId": "il2IrgFHfsg",
+    "title": "The Ooooh Cat"
+  }
+ ];
+
+ var addVideoToList = function(video) {
+
+    var videoLink = $('<a>');
+    videoLink.append(video.title);
+    var thumbnailUrl = youtube.generateThumbnailUrl(video.youtubeId);
+    var thumbnailImg = $('<img>');
+    thumbnailImg.attr('src', thumbnailUrl);
+    videoLink.append(thumbnailImg);
+    
+    videoLink.on('click', function(e) {
+        e.preventDefault();
+
+        var videoEmbed = $('<iframe></iframe>');
+        videoEmbed.attr('src', youtube.generateEmbedUrl(video.youtubeId));
+        videoEmbed.attr('width', 560);
+        videoEmbed.attr('height', 315);
+
+        var videoWatcher = $('#video-watcher');
+        videoWatcher.hide();
+        videoWatcher.html(videoEmbed);
+        videoWatcher.fadeIn();
+    });
+
+    var videoItem = $('<li>');
+    videoItem.append(videoLink);
+    $('#videos-list').append(videoItem);
+ }
+
+ for (var i = 0; i < videos.length; i++) {
+    addVideoToList(videos[i]);
+ }
+ </script>
+ 
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style>
+  div.grammarly-desktop-integration {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select:none;
+    user-select:none;
+  }
+
+  div.grammarly-desktop-integration:before {
+    content: attr(data-content);
+  }
+</style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>
