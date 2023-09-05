@@ -1,13 +1,13 @@
 package socket.test1;
 
-
 import java.io.*;
 import java.net.*;
+
 public class ImageServer {
     public static void main(String[] args) {
         try {
             ServerSocket server = new ServerSocket(8008);
-            String imageName = "Koala.png";
+            String imageName = "socket/test1/Koala.png";
 
             while (true) {
                 System.out.println("server is waiting for connection request from clients");
@@ -42,17 +42,21 @@ public class ImageServer {
                         fis.close();
 
                         // send the image bytes
+                        out.writeChar('C');
                         out.writeInt(imageData.length);
                         out.write(imageData);
                         out.flush();
-
+                        System.out.println("[SERVER] server responded with bytes: " + imageData.length);
+                        break;
                     }
+
                     //step three, then reply to the client with "Sorry, no such picture",
                     else{
                         String resMessage = "Sorry, no such picture as " + clientInput;
                         out.writeChar('M');
                         out.writeUTF(resMessage);
                         out.flush();
+                        System.out.println("[SERVER] server responded with msg: " + resMessage);
                         break;
                     }
                 }
