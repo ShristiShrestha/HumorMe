@@ -6,7 +6,8 @@ import java.net.*;
 public class ImageClient {
     public static void main(String[] args) {
         String host = "localhost";
-        String imageName = "socket/test1/Koala.png";
+        String imageName = "Koala-wrong.png";
+        String outputDir = "socket/test1/";
 
         try {
             Socket socket = new Socket(host, 8008);
@@ -20,6 +21,7 @@ public class ImageClient {
             /* Detailed requirement below*/
 
             // Step one: send the picture name "Koala.jpg" to the server
+            System.out.println("[CLIENT] Sending image name: " + imageName);
             out.println(imageName);
             out.flush(); // ensure imageName is written immediately
 
@@ -29,23 +31,23 @@ public class ImageClient {
                 DataInputStream reader = new DataInputStream(in);
                 char serverData = reader.readChar();
 
-                System.out.println("[CLIENT] server first response: " + serverData);
                 if(serverData == 'M'){
                     String charData = reader.readUTF();
-                    System.out.println("[CLIENT] server err message: " + charData);
+                    System.out.println("[CLIENT] received err message: " + charData);
                     reader.close();
                     break;
                 }
                 else if(serverData == 'C'){
                     int byteSize = reader.readInt();
                     byte[] byteData = reader.readAllBytes();
-                    System.out.println("[CLIENT] server responded with byteSize: "
+                    System.out.println("[CLIENT] received byteSize: "
                             + byteSize + " and byteData: " + byteData.length);
 
                     String fileExt = "png";
                     String outputImgName  = imageName.replace("." + fileExt, "-1." + fileExt);
                     try{
-                        FileOutputStream fos = new FileOutputStream(outputImgName);
+                        String outFilePath = outputDir + outputImgName;
+                        FileOutputStream fos = new FileOutputStream(outFilePath);
                         fos.write(byteData);
 
                         // close file and buffer readers

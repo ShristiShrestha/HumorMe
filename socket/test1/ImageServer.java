@@ -7,7 +7,8 @@ public class ImageServer {
     public static void main(String[] args) {
         try {
             ServerSocket server = new ServerSocket(8008);
-            String imageName = "socket/test1/Koala.png";
+            String imageName = "Koala.png";
+            String inputDir = "socket/test1/";
 
             while (true) {
                 System.out.println("server is waiting for connection request from clients");
@@ -19,7 +20,7 @@ public class ImageServer {
                 /* Detailed requirement below*/
 
                 //Step one: check the picture name sent from the client,
-                String clientInput = null;
+                String clientInput;
                 while((clientInput = in.readLine()) != null){
                     System.out.println("[SERVER] received: " + clientInput);
 
@@ -29,7 +30,8 @@ public class ImageServer {
                     //Step two, read the picture "Koala.jpg" from the local disk, and send the content back to the client.
                     if(clientReqMatch){
                         // init image as file
-                        File imageFile = new File(imageName);
+                        String imageNamePath = inputDir + clientInput;
+                        File imageFile = new File(imageNamePath);
 
                         if(!imageFile.exists()){
                             throw new Exception("Failed to load image as File object.");
@@ -46,8 +48,7 @@ public class ImageServer {
                         out.writeInt(imageData.length);
                         out.write(imageData);
                         out.flush();
-                        System.out.println("[SERVER] server responded with bytes: " + imageData.length);
-                        break;
+                        System.out.println("[SERVER] sending bytes: " + imageData.length + " : for image: " + clientInput);
                     }
 
                     //step three, then reply to the client with "Sorry, no such picture",
@@ -56,9 +57,9 @@ public class ImageServer {
                         out.writeChar('M');
                         out.writeUTF(resMessage);
                         out.flush();
-                        System.out.println("[SERVER] server responded with msg: " + resMessage);
-                        break;
+                        System.out.println("[SERVER] sending error msg: " + resMessage);
                     }
+                    break;
                 }
 
                 //step four, close the input/output streams, close the socket.
