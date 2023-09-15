@@ -13,8 +13,11 @@
             <li>ID: ${user.uuid}, Name: ${user.name}</li>
         </c:forEach>
     </ul>
+    
+    <a href="/CSC7510Mod3/html/index.html">Back to home</a>
+    
     <script>
-    console.log(<%= request.getAttribute("errorMsg") %>);
+    	console.log(<%= request.getAttribute("errorMsg") %>);
     </script>
 </body>
 </html>
