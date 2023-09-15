@@ -18,6 +18,7 @@ public class MySqlDb {
 	
 	public boolean connect() {
 		try {
+			Class.forName("com.mysql.jdbc.Driver");
 			this.conn = DriverManager.getConnection(connectUrl, this.user, this.password);
 			System.out.println("Connected to db: " + this.database);
 			return true;
@@ -31,7 +32,7 @@ public class MySqlDb {
 	
 	public boolean insert(User user) {
 		try {
-			String sql = "insert into users values(?, ?, ?, ?, ?)";
+			String sql = "insert into users values(?, ?, ?, ?, ?, ?)";
 			PreparedStatement stmt = this.conn.prepareStatement(sql);
 			stmt.setString(1, user.getUuid());
 			stmt.setString(2, user.getName());
@@ -54,9 +55,9 @@ public class MySqlDb {
 		ArrayList<User> users = new ArrayList<User>();
 		
 		try {
-			String sql = "select * from users where name like %?%";
+			String sql = "select * from " + this.database + ".users where name like ?";
 			PreparedStatement stmt = this.conn.prepareStatement(sql);
-			stmt.setString(1, query);
+			stmt.setString(1, "%" + query + "%");
 			
 			ResultSet resultSet = stmt.executeQuery();
 			while(resultSet.next()) {

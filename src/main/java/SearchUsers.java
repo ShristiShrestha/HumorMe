@@ -1,27 +1,37 @@
+
+
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
 
-@WebServlet(value="/search", asyncSupported = true)
-public class UserSearch {
-	private static final long serialVersionUID = 2L;
+
+/**
+ * Servlet implementation class SearchUsers
+ */
+@WebServlet("/search")
+@MultipartConfig
+public class SearchUsers extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
 	private MySqlDb db;
-
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserSearch() {
-        super();      
+    public SearchUsers() {
+    	super();      
         this.db = new MySqlDb("cloud");
         db.connect();
     }
-    
+
+
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
