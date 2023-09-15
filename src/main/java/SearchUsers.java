@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class SearchUsers
  */
+
 @WebServlet("/search")
 @MultipartConfig
 public class SearchUsers extends HttpServlet {

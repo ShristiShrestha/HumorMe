@@ -12,6 +12,6 @@
 <div>Gender: <p id="id-gender"><%= request.getAttribute("gender") %></p></div>
 <div>Experience: <p id="id-experience"> <%= request.getAttribute("experience") %></p></div>
 <div>Error message: <p id="id-error-msg"> <%= request.getAttribute("errorMsg") %></p></div>
-<a href="/CSC7510Mod3/html/index.html">Try again</a>
+<a href="/CSC7510Mod4/html/index.html">Try again</a>
 </body>
 </html>

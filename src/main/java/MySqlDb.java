@@ -12,7 +12,7 @@ public class MySqlDb {
 	MySqlDb(String database){
 		this.database = database;
 		this.user = "root";
-		this.password = "";
+		this.password = "password";
 		this.connectUrl = "jdbc:mysql://localhost:3306/" + this.database;
 	}
 	
@@ -32,16 +32,21 @@ public class MySqlDb {
 	
 	public boolean insert(User user) {
 		try {
-			String sql = "insert into users values(?, ?, ?, ?, ?, ?)";
-			PreparedStatement stmt = this.conn.prepareStatement(sql);
-			stmt.setString(1, user.getUuid());
-			stmt.setString(2, user.getName());
-			stmt.setString(3, user.getEmail());
-			stmt.setString(4, user.getLocation());
-			stmt.setString(5, user.getGender());
-			stmt.setString(6, user.getExperience());
-			int rowCount = stmt.executeUpdate();
-			return rowCount == 1;
+			if(this.conn == null) {
+				this.connect();
+			}
+			if(this.conn != null) {
+				String sql = "insert into users values(?, ?, ?, ?, ?, ?)";
+				PreparedStatement stmt = this.conn.prepareStatement(sql);
+				stmt.setString(1, user.getUuid());
+				stmt.setString(2, user.getName());
+				stmt.setString(3, user.getEmail());
+				stmt.setString(4, user.getLocation());
+				stmt.setString(5, user.getGender());
+				stmt.setString(6, user.getExperience());
+				int rowCount = stmt.executeUpdate();
+				return rowCount == 1;
+			}
 		}
 		catch(Exception err) {
 			System.out.println("[INSERT]" +  err.getLocalizedMessage());
@@ -55,20 +60,26 @@ public class MySqlDb {
 		ArrayList<User> users = new ArrayList<User>();
 		
 		try {
-			String sql = "select * from " + this.database + ".users where name like ?";
-			PreparedStatement stmt = this.conn.prepareStatement(sql);
-			stmt.setString(1, "%" + query + "%");
+			if(this.conn == null) {
+				this.connect();
+			}
 			
-			ResultSet resultSet = stmt.executeQuery();
-			while(resultSet.next()) {
-				String uuid = resultSet.getString("uuid");
-				String name = resultSet.getString("name");
-				String email = resultSet.getString("email");
-				String location = resultSet.getString("location");
-				String gender = resultSet.getString("gender");
-				String experience = resultSet.getString("experience");
-				User user = new User(uuid, name, email, location, gender, experience);
-				users.add(user);
+			if(this.conn != null) {
+				String sql = "select * from " + this.database + ".users where name like ?";
+				PreparedStatement stmt = this.conn.prepareStatement(sql);
+				stmt.setString(1, "%" + query + "%");
+				
+				ResultSet resultSet = stmt.executeQuery();
+				while(resultSet.next()) {
+					String uuid = resultSet.getString("uuid");
+					String name = resultSet.getString("name");
+					String email = resultSet.getString("email");
+					String location = resultSet.getString("location");
+					String gender = resultSet.getString("gender");
+					String experience = resultSet.getString("experience");
+					User user = new User(uuid, name, email, location, gender, experience);
+					users.add(user);
+				}
 			}
 			
 		}

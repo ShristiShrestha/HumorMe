@@ -10,11 +10,20 @@
 <h1>Search results</h1>
     <ul>
         <c:forEach var="user" items="${users}">
-            <li>ID: ${user.uuid}, Name: ${user.name}</li>
+            <li>
+            	<div>
+            	  <p>Name: ${user.name}</p>
+            	  <p>Email: ${user.email}</p>
+            	  <p>Gender: ${user.gender}</p>
+            	  <p>Location: ${user.location}</p>
+            	  <p>Experience: ${user.experience}</p>
+            	</div>
+            	<br/>
+            </li>
         </c:forEach>
     </ul>
     
-    <a href="/CSC7510Mod3/html/index.html">Back to home</a>
+    <a href="/CSC7510Mod4/html/index.html">Back to home</a>
     
     <script>
     	console.log(<%= request.getAttribute("errorMsg") %>);

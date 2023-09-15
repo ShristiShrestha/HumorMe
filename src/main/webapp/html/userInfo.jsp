@@ -33,6 +33,6 @@ margin: 8px 0;
 <div class="info-div"><p class="label">Experience: </p> <p id="id-experience"> <%= request.getAttribute("experience") %></p></div>
 
 
-<a href="/CSC7510Mod3/html/index.html">Register new user</a>
+<a href="/CSC7510Mod4/html/index.html">Register new user</a>
 </body>
 </html>
