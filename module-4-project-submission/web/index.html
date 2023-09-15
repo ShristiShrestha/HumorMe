@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!-- saved from url=(0081)http://www.csc.lsu.edu/~qywang/CSC7610/HTMLExercise/project/UserRegistration.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>The Student's Servlet project</title>
+ </head>
+ <body data-new-gr-c-s-check-loaded="14.1123.0" data-gr-ext-installed="">
+  <img src="Thanksgiving.gif" width="200" alt="LSU Logo">
+
+  <h1>About LSU Computer Science</h1>
+ 
+  <p>
+  Welcome to the <strong>Division of Computer Science and Engineering</strong> at LSU!.
+  </p>
+
+  
+  <h2>Sign your information to the department!</h2>
+  <form action="/CSC7510Mod4/register" method="post" enctype="multipart/form-data">
+    <label>Name: <input name="name" type="text"></label>
+    <br>
+    <label>Email: <input name="email" type="email"></label>
+    <br>
+    <label>Preferred place:
+      <select name="location">
+        <option value="Baton Rouge">Baton Rouge</option>
+        <option value="New Orleans">New Orleans</option>
+        <option value="New York">New York</option>
+        <option value="Atlanta">Atlanta</option>
+        <option value="Countryside">Countryside</option>
+      </select></label>
+    <br>
+    <fieldset>
+      <legend>Gender:</legend>
+      <label for="female">Female</label>
+      <input type="radio" name="gender" id="female" value="female">
+      <label for="male">Male</label>
+      <input type="radio" name="gender" id="male" value="male">
+    </fieldset>
+    <br>
+    <label>Experience:
+    <br>
+    <textarea name="experience"></textarea> 
+    </label>
+    <br>
+     <button type="submit">Sign Up</button>
+     <!--input type="submit" value="Upload" name="upload" id="upload">-->
+  </form>
+  
+  
+  <br>
+  <br>
+
+
+<form action="/CSC7510Mod4/search" method="post" enctype="multipart/form-data">
+	<label>Search: <input name="query" type="text" placeholder="search by name"></label>
+	 <button type="submit">Search</button>
+</form>
+ 
+</body>
