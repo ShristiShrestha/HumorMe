@@ -1,0 +1,157 @@
+[
+  {
+    "movies": [
+      {
+        "id": 1,
+        "title": "Les Misérables",
+        "top_actors": [
+          1,
+          2,
+          3
+        ],
+        "studio": 1,
+        "review": "7.5/10",
+        "genres": [
+          "Drama",
+          "Musical",
+          "Romance"
+        ],
+        "director": "Tom Hooper",
+        "release_date": "December 25, 2012",
+        "budget": "$61,000,000 (estimated)"
+      },
+      {
+        "id": 2,
+        "title": "The Soloist",
+        "top_actors": [
+          4,
+          5,
+          6
+        ],
+        "studio": 2,
+        "review": "6.5/10",
+        "genres": [
+          "Drama",
+          "Music",
+          "Biography"
+        ],
+        "director": "Joe Wright",
+        "release_date": "April 24, 2009",
+        "budget": "$60,000,000 (estimated)"
+      },
+      {
+        "id": 3,
+        "title": "Sherlock Holmes",
+        "top_actors": [
+          5,
+          7,
+          8
+        ],
+        "studio": 2,
+        "review": "7.6/10",
+        "genres": [
+          "Action",
+          "Adventure",
+          "Mystery"
+        ],
+        "director": "Joe Wright",
+        "release_date": "December 25, 2009",
+        "budget": "$90,000,000 (estimated)"
+      },
+      {
+        "id": 4,
+        "title": "Rise of the Guardians",
+        "top_actors": [
+          9,
+          10,
+          11
+        ],
+        "studio": 3,
+        "review": "7.2/10",
+        "genres": [
+          "Action",
+          "Animation",
+          "Adventure"
+        ],
+        "director": "Peter Ramsey",
+        "release_date": "November 21, 2012",
+        "budget": "$145,000,000 (estimated)"
+      }
+    ]
+  },
+  {
+    "actors": [
+      {
+        "id": 1,
+        "name": "Hugh Nicholson",
+        "url": "https://www.imdb.com/name/nm0629933/?ref_=tt_ov_wr"
+      },
+      {
+        "id": 2,
+        "name": "Russell Crowe",
+        "url": "https://www.imdb.com/name/nm0000128/?ref_=tt_ov_wr"
+      },
+      {
+        "id": 3,
+        "name": "Anne Hathaway",
+        "url": "https://www.imdb.com/name/nm0004266/?ref_=tt_ov_wr"
+      },
+      {
+        "id": 4,
+        "name": "Jamie Foxx",
+        "url": "https://www.imdb.com/name/nm0004937/?ref_=tt_ov_wr"
+      },
+      {
+        "id": 5,
+        "name": "Robert Downey Jr.",
+        "url": "https://www.imdb.com/name/nm0000375/?ref_=tt_ov_wr"
+      },
+      {
+        "id": 6,
+        "name": "Catherine Keener",
+        "url": "https://www.imdb.com/name/nm0001416/?ref_=tt_ov_wr"
+      },
+      {
+        "id": 7,
+        "name": "Jude Law",
+        "url": "https://www.imdb.com/name/nm0000179/?ref_=tt_ov_wr"
+      },
+      {
+        "id": 8,
+        "name": "Rachel McAdams",
+        "url": "https://www.imdb.com/name/nm1046097/?ref_=tt_ov_wr"
+      },
+      {
+        "id": 9,
+        "name": "Alec Baldwin",
+        "url": "https://www.imdb.com/name/nm0000285/?ref_=tt_ov_wr"
+      },
+      {
+        "id": 10,
+        "name": "Isla Fisher",
+        "url": "https://www.imdb.com/name/nm0279545/?ref_=tt_ov_wr"
+      },
+      {
+        "id": 11,
+        "name": "Hugh Jackman",
+        "url": "https://www.imdb.com/name/nm0413168/?ref_=tt_ov_wr"
+      }
+    ]
+  },
+  {
+    "studios": [
+      {
+        "id": 1,
+        "name": "Universal Pictures"
+      },
+      {
+        "id": 2,
+        "name": "Warner Bros"
+      },
+      {
+        "id": 3,
+        "name": "DreamWorks Animations"
+      }
+    ]
+  }
+]

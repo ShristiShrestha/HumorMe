@@ -1,0 +1,109 @@
+[
+  {
+    "name": "Dartealing Lounge",
+    "avg_rating": 3.9,
+    "num_reviews": 467,
+    "claimed": true,
+    "labels": ["tea rooms", "venues", "event spaces"],
+    "last_updated": "march 26, 2023",
+    "about": "Small-batched scones baked daily incorporating seasonal ingredients and flavors -Made-to-order tea sandwich selection is varied with each flavor bringing its own unique character to the tea party -Welcome groups and parties for all occasions, celebrating friendship, bridal and baby showers, or birthdays",
+    "amenities": {
+      "takeout": true,
+      "pescatarian options": true,
+      "delivery": false,
+      "credit cards": true
+    },
+      "opening_hours": {
+      "sunday": "11:00 AM - 4:30 PM",
+      "monday": "closed",
+      "tuesday": "closed",
+      "wednesday": "closed",
+      "thursday": "closed",
+      "friday": "closed",
+      "saturday": "11:00 AM - 4:30 PM"
+    },
+    "website": "https://www.dartealinglounge.com",
+    "address": "470 3rd st, San Fransisco, CA, 94107",
+    "reviews": [
+      {
+        "id": 1,
+        "user": "Scott H.",
+        "review": "The place is lovely and a great part of San Francisco's food scene.  It's soooo cute!  I loved the tower of finger foods and my wife's tea.  I didn't love my tea- darn!  Highly recommended!"
+      },
+      {
+        "id": 2,
+        "user": "Johnny S.",
+        "review": "Had an awesome time here. We got the tea set. Each item was very delicious and exceeded my expectations. I would say that the value for what you pay is excellent. Savory and sweet are both great"
+      }
+    ]
+  },
+  {
+    "name": "Lovejoy's Tea Room",
+    "avg_rating": 4.3,
+    "num_reviews": 1329,
+    "claimed": true,
+    "labels": ["British", "tea rooms"],
+    "last_updated": "",
+    "about": "We are a cozy British tea room nestled in San Francisco's Noe Valley neighborhood. Warm scones, tasty treats and a bottomless pot o' tea await you! Our last seating is at 3pm",
+    "amenities": {
+      "takeout": true,
+      "delivery": true,
+      "health score pass": true,
+      "takes reservations": true
+    },
+      "opening_hours": {
+      "sunday": "11:00 AM - 5:00 PM",
+      "monday": "closed",
+      "tuesday": "closed",
+      "wednesday": "closed",
+      "thursday": "11:00 AM - 5:00 PM",
+      "friday": "11:00 AM - 5:00 PM",
+      "saturday": "11:00 AM - 5:00 PM"
+    },
+    "website": "https://www.lovejoystearoom.com",
+    "address": "1351 Church St, San Fransisco, CA, 94114",
+    "reviews": [
+      {
+        "id": 1,
+        "user": "Liyi D.",
+        "review": "To my surprise, I was able to get in for a semi last-minute reservation to celebrate a friend's belated birthday. Thanks to whoever that gave up the reservation."
+      },
+      {
+        "id": 2,
+        "user": "Erich L.",
+        "review": "Nice casual traditional type of place for tea.  It's very cute inside with unique decor.  The staff are super friendly.  The service was a little off because it was so busy but it was obvious they care and try their best."
+      }
+    ]
+  },
+   {
+    "name": "Peet's Coffee",
+    "avg_rating": 4.3,
+     "num_reviews": 84,
+     "claimed": true,
+     "labels": ["coffee & tea"],
+     "last_updated": "",
+     "about": "",
+     "amenities": {"takeout": true,
+      "pescatarian options": true,
+      "delivery": false,
+      "credit cards": true},
+     "hours": {},
+    "phone": "(415) 593-8920",
+     "website": "peets.com",
+    "address": "405 Howard San Francisco, CA 94105",
+    "reviews": [
+      {
+        "id": 1,
+        "review": "I usually don't go to Peet's but I will definitely start coming back for the awesome customer service they had. They were the only coffee spot open nearby when I was on the way to work at 6 am. Customer service was great all around. Really started my day off to a great start!"
+      },
+      {
+        "id": 2,
+        "review": "The baristas and cashiers at this location are very nice. Their app doesn't work very well, but once you get it started, you can come here for your breakfast pastries and earn points. I found all of their pastries to be very good. I like the ham and Swiss croissant, and the flatbread chorizo. Delicious for a treat yourself day!"
+      },
+      {
+        "id": 3,
+        "review": "Stopped in for a house iced coffee. The they had made already for about 2 hours old so they asked if I had a little time and 5mins I'd have fresh coffee.Really not a big deal to me but I said sure I'd wait and it was really good. I prefer it over Starbucks, and the staff are friendly."
+      }
+    ]
+  }
+]
