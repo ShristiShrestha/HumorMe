@@ -25,17 +25,22 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-rest")
-	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.springframework.session:spring-session-core")
+	implementation("org.springframework.boot:spring-boot-starter-data-rest:3.0.4")
+	implementation("org.springframework.boot:spring-boot-starter-security:3.0.4")
+	implementation("org.springframework.boot:spring-boot-starter-web:3.1.0")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
+	implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
+	implementation("org.springframework.session:spring-session-core:3.0.0")
+	implementation("javax.persistence:javax.persistence-api:2.2")
+	implementation("org.hibernate:hibernate-core:6.1.7.Final")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.0.4")
+	implementation("org.springframework.boot:spring-boot-starter-web:3.1.0")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+
 }
 
 tasks.withType<KotlinCompile> {
