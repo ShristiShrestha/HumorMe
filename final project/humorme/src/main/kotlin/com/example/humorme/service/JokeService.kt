@@ -19,7 +19,7 @@ class JokeService @Autowired constructor(
                 title = req.title,
                 text = req.text,
                 createdAt = Date(),
-                user = user
+//                user = user
         )
         return jokeRepo.save(joke)
     }

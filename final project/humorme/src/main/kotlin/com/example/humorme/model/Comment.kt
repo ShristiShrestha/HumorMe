@@ -1,6 +1,7 @@
 package com.example.humorme.model
 import javax.persistence.*
 
+
 @Entity
 data class Comment (
         @Id

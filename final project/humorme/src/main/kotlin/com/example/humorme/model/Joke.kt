@@ -9,8 +9,7 @@ data class Joke (
         val id: String,
         val title: String,
         val text: String,
-        val createdAt : Date,
-
-        @ManyToOne(fetch = FetchType.LAZY)
-        val user: User
+        val createdAt : Date
+//        @ManyToOne(fetch = FetchType.LAZY)
+//        val user: User
 )
