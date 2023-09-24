@@ -15,6 +15,7 @@ class JokeService @Autowired constructor(
 ) {
     fun create(req: PostJokeDto, user: User): Joke{
         val joke = Joke(
+                id = UUID.randomUUID().toString(),
                 title = req.title,
                 text = req.text,
                 createdAt = Date(),

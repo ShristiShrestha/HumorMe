@@ -4,8 +4,7 @@ import javax.persistence.*
 @Entity
 data class Comment (
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long? = null,
+        val id: String,
 
         val text: String,
 

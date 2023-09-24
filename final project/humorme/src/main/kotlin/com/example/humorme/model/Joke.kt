@@ -6,13 +6,11 @@ import javax.persistence.*
 @Entity
 data class Joke (
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long? = null,
-
+        val id: String,
         val title: String,
         val text: String,
         val createdAt : Date,
 
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
         val user: User
 )
