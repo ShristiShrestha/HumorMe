@@ -1,0 +1,15 @@
+build
+.idea
+node_modules
+.next
+private
+utils/.env.production
+.firebaserc
+.firebase
+*.log
+public/.next
+out
+utils/.env.local
+.DS_Store
+.env.local
+.env.production
