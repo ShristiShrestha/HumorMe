@@ -1,16 +1,16 @@
 services:
-  rabbitmq:
-    container_name: rabbitmq
-    image: rabbitmq:3.11-management
-    networks:
-      - scheduler-api-net
-    expose:
-      - 5672
-      - 15672
-    ports:
-      - 15672:15672
-    environment:
-      - RABBIT_MQ_URL=rabbitmq
+#  rabbitmq:
+#    container_name: rabbitmq
+#    image: rabbitmq:3.11-management
+#    networks:
+#      - scheduler-api-net
+#    expose:
+#      - 5672
+#      - 15672
+#    ports:
+#      - 15672:15672
+#    environment:
+#      - RABBIT_MQ_URL=rabbitmq
   db:
     image: postgres
     restart: always
@@ -23,17 +23,19 @@ services:
     environment:
       - POSTGRES_DB_URL=db
       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-    expose:
-      - 5432
-  backend:
-    build: .
+#    expose:
+#      - 5432
     ports:
-      - 8080:8080
-    environment:
-      - RABBIT_MQ_URL=rabbitmq
-      - POSTGRES_DB_URL=db
-    networks:
-      - scheduler-api-net
+      - "5432:5432"
+#  backend:
+#    build: .
+#    ports:
+#      - 8080:8080
+#    environment:
+#      - RABBIT_MQ_URL=rabbitmq
+#      - POSTGRES_DB_URL=db
+#    networks:
+#      - scheduler-api-net
 volumes:
   db-data:
 secrets:

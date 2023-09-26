@@ -9,7 +9,6 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "amqplib": "^0.10.3",
-    "antd": "^5.3.2",
     "axios": "^0.21.1",
     "axios-cancel": "^0.2.2",
     "bowser": "^2.11.0",
