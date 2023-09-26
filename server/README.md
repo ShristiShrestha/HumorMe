@@ -1,12 +1,11 @@
-# online-scheduler-api
+# SERVER implementation for HumorMe!
 
 ## Setup
-1. Download and run postgres server. 
+1. Download and run postgres server.
 2. Make necessary db connection credential changes on application.properties file, if necessary.
 3. Download and install jdk 11, maven 3.9.0 .
-4. Download and install RabbitMQ 3.11.11 .
-5. To run the application with maven, execute `mvn package` followed by `java -jar -DPOSTGRES_DB_URL="localhost" target/online-scheduler-api-0.0.1-SNAPSHOT.jar`.
-6. To verify the application has started, visit [link](http://localhost:8080/actuator).
+4. To run the application with maven, execute `mvn package` followed by `java -jar -DPOSTGRES_DB_URL="localhost" target/online-scheduler-api-0.0.1-SNAPSHOT.jar`.
+5. To verify the application has started, visit [link](http://localhost:8080/actuator).
 
 ## Run with docker
 1. Download and install docker.
