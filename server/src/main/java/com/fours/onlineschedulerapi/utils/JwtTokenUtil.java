@@ -60,13 +60,7 @@ public class JwtTokenUtil implements Serializable {
 
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
 
-        List<String> authsList = new ArrayList<>(authorities.size());
-
-        for (GrantedAuthority authority : authorities) {
-            authsList.add(authority.getAuthority());
-        }
-
-        return doGenerateToken(authsList, userDetails.getUsername());
+        return doGenerateToken(userDetails.getUsername());
     }
 
     //while creating the token -
@@ -74,9 +68,9 @@ public class JwtTokenUtil implements Serializable {
     //2. Sign the JWT using the HS512 algorithm and secret key.
     //3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
     //   compaction of the JWT to a URL-safe string
-    private String doGenerateToken(List<String> authsList, String subject) {
+    private String doGenerateToken(String subject) {
 
-        return Jwts.builder().claim("roles", authsList)
+        return Jwts.builder().claim("roles", "")
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))

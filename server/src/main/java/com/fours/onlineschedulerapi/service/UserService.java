@@ -48,37 +48,10 @@ public class UserService {
         if (savedUser.isPresent()) {
             throw new BadRequestException("User with provided email already exists.");
         } else {
-            Boolean isTutor = user.getIsTutor();
 
             user.setIsEnabled(true);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-
-            String roleString = isTutor ? RoleConstants.TUTOR : RoleConstants.STUDENT;
-            roleString = user.getIsCoordinator() ? RoleConstants.COORDINATOR : roleString;
-
-            if (isTutor) {
-                user.getTutor().setUser(user);
-            }
-
-            Optional<Role> role = roleRepository.findByName(roleString);
-
-            if (!role.isPresent()) {
-                Role newRole = Role.builder()
-                        .name(roleString)
-                        .build();
-
-                roleRepository.save(newRole);
-
-                role = Optional.of(newRole);
-            }
-
-            Set<Role> roles = new HashSet<>();
-            roles.add(role.get());
-
-            user.setRoles(roles);
-
             userRepository.save(user);
-
             return new UserDto(user);
         }
     }
@@ -93,31 +66,13 @@ public class UserService {
         } else {
             User userToUpdate = userOptional.get();
 
-            this.setFieldsToUpdate(user, userToUpdate);
-
             User updatedUser = userRepository.save(userToUpdate);
 
             return new UserDto(updatedUser);
         }
     }
 
-    private void setFieldsToUpdate(UserDto user, User userToUpdate) {
-        String name = user.getName();
-
-        if (Objects.nonNull(name) && !name.trim().isEmpty()) {
-            userToUpdate.setName(name);
-        }
-
-        if (userToUpdate.getIsTutor()) {
-            List<String> expertise = user.getExpertise();
-
-            if (Objects.nonNull(expertise)) {
-                userToUpdate.getTutor().setExpertiseList(expertise);
-            }
-        }
-    }
-
-    public void delete(long id) {
+      public void delete(long id) {
         userRepository.updateIsEnabled(id, false);
     }
 
@@ -132,16 +87,6 @@ public class UserService {
 
         if (!users.isEmpty()) {
             //Filter by role; either tutor, student or coordinator
-            if (role.isPresent()) {
-                String roleValue = role.get();
-
-                users = users.stream()
-                        .filter(user -> user.getRoles().stream()
-                                .map(Role::getName)
-                                .collect(Collectors.toList())
-                                .contains(roleValue.toUpperCase()))
-                        .collect(Collectors.toList());
-            }
 
             //Convert to dto
             userDto.addAll(
@@ -169,13 +114,6 @@ public class UserService {
         User user = userRepository
                 .findById(id)
                 .orElseThrow(() -> new BadRequestException(ResponseMessage.NON_EXISTENT_USER));
-
-        if (user.getIsTutor()) {
-            user.getTutor().setRatingByNumbers(
-                    this.getRatingByNumbers(id)
-            );
-        }
-
         return new UserDto(user);
     }
 
