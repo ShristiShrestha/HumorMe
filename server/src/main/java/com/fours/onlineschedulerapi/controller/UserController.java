@@ -34,9 +34,6 @@ public class UserController {
     private AppointmentService appointmentService;
 
     @Autowired
-    private RabbitMqService rabbitMqService;
-
-    @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping(value = "/signup")
@@ -45,11 +42,6 @@ public class UserController {
             UserDto savedUser = userService.save(user);
 
             String email = savedUser.getEmail();
-
-            String queueName = RabbitMqConstant.QUEUE_PREFIX + email;
-
-            //Create a queue for every user to facilitate chat
-            rabbitMqService.createQueue(queueName);
 
             final String token = jwtTokenUtil.generateToken(email);
 

@@ -24,4 +24,12 @@ public class Comment {
     @ManyToOne
     private Joke joke;
 
+    @OneToOne
+    private User user; // user who wrote this comment
+
+    public Comment(String text, Joke joke, User user){
+        this.text = text;
+        this.joke = joke;
+        this.user = user;
+    }
 }

@@ -12,14 +12,14 @@ services:
 #    environment:
 #      - RABBIT_MQ_URL=rabbitmq
   db:
-    image: postgres
+    image: postgres:latest
     restart: always
     secrets:
       - db-password
     volumes:
       - db-data:/var/lib/postgresql/data
-    networks:
-      - scheduler-api-net
+#    networks:
+#      - scheduler-api-net
     environment:
       - POSTGRES_DB_URL=db
       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
@@ -41,5 +41,5 @@ volumes:
 secrets:
   db-password:
     file: password.txt
-networks:
-  scheduler-api-net:
+#networks:
+#  scheduler-api-net:

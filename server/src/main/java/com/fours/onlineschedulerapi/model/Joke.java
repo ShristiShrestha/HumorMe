@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -21,7 +21,16 @@ public class Joke {
     private Long id;
     private String title;
     private String text;
-
-    @CreatedDate
+    private String labels;
+    @Column(name = "created_at")
+    @CreationTimestamp
     private Date createdAt;
+    @ManyToOne
+    private User user;
+
+    public Joke(String title, String text, String labels){
+        this.title = title;
+        this.text = text;
+        this.labels = labels;
+    }
 }

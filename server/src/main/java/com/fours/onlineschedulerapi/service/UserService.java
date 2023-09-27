@@ -2,10 +2,11 @@ package com.fours.onlineschedulerapi.service;
 
 import com.fours.onlineschedulerapi.constants.AppointmentConstant;
 import com.fours.onlineschedulerapi.constants.ResponseMessage;
-import com.fours.onlineschedulerapi.constants.RoleConstants;
 import com.fours.onlineschedulerapi.dto.UserDto;
 import com.fours.onlineschedulerapi.exception.BadRequestException;
-import com.fours.onlineschedulerapi.model.*;
+import com.fours.onlineschedulerapi.exception.NotFoundException;
+import com.fours.onlineschedulerapi.model.Appointment;
+import com.fours.onlineschedulerapi.model.User;
 import com.fours.onlineschedulerapi.repository.AppointmentRepository;
 import com.fours.onlineschedulerapi.repository.RoleRepository;
 import com.fours.onlineschedulerapi.repository.UserRepository;
@@ -13,7 +14,6 @@ import com.fours.onlineschedulerapi.utils.FilterSortUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -141,5 +141,12 @@ public class UserService {
         }
 
         return ratingByNumber;
+    }
+
+    public User findByName(String name) throws NotFoundException {
+        Optional<User> user = userRepository.findByEmailOrName(name, name);
+        if(user.isPresent())
+            return user.get();
+        throw new NotFoundException("User with name " + name + " is not found.");
     }
 }

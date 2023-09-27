@@ -94,8 +94,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/profile").permitAll()
             .anyRequest().authenticated()
             .and()
-            .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-            .and()
+//            .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+//            .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
