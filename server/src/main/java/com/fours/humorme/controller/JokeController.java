@@ -34,14 +34,6 @@ public class JokeController {
         return ResponseEntity.ok(savedJoke);
     }
 
-    @PostMapping("/{jokeId}/ratings")
-    public ResponseEntity<?> postRating(@PathVariable Long jokeId, @RequestBody String label) throws NotFoundException, JsonProcessingException {
-        User user = userService.getAuthenticatedUser();
-        Joke joke = jokeService.findById(jokeId);
-        Rate rate = jokeService.rate(joke, user, label);
-        return new ResponseEntity<>(rate, HttpStatus.OK);
-    }
-
     @DeleteMapping("/{jokeId}")
     public ResponseEntity<?> delete(@PathVariable Long jokeId) throws NotFoundException, NotAuthorizedException {
         User user = userService.getAuthenticatedUser();
@@ -55,16 +47,32 @@ public class JokeController {
         return new ResponseEntity<>(joke, HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<List<Joke>> search(@RequestParam(required = false) String labels) {
+        List<Joke> jokes = jokeService.findAll();
+        return new ResponseEntity<>(jokes, HttpStatus.OK);
+    }
+
+    @PostMapping("/{jokeId}/ratings")
+    public ResponseEntity<?> postRating(@PathVariable Long jokeId, @RequestBody String label) throws NotFoundException, JsonProcessingException {
+        User user = userService.getAuthenticatedUser();
+        Joke joke = jokeService.findById(jokeId);
+        Rate rate = jokeService.rate(joke, user, label);
+        return new ResponseEntity<>(rate, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{jokeId}/ratings/{jokeRatingId}")
+    public ResponseEntity<?> deleteRating(@PathVariable Long jokeId, @PathVariable Long jokeRatingId) throws NotFoundException, JsonProcessingException, NotAuthorizedException {
+        User user = userService.getAuthenticatedUser();
+        Joke joke = jokeService.findById(jokeId); // making
+        joke = jokeService.deleteRating(joke, user, jokeRatingId);
+        return new ResponseEntity<>(joke, HttpStatus.OK);
+    }
+
     @GetMapping("/{jokeId}/ratings")
     public ResponseEntity<List<Rate>> getRating(@PathVariable Long jokeId) throws NotFoundException {
         Joke joke = jokeService.findById(jokeId);
         List<Rate> jokeRatings = jokeService.findJokeRatings(joke);
         return new ResponseEntity<>(jokeRatings, HttpStatus.OK);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Joke>> search(@RequestParam(required = false) String labels) {
-        List<Joke> jokes = jokeService.findAll();
-        return new ResponseEntity<>(jokes, HttpStatus.OK);
     }
 }

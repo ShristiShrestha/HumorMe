@@ -52,12 +52,21 @@ public class JokeService {
         throw new NotAuthorizedException("Insufficient privilege to delete the joke.");
     }
 
+    public Joke deleteRating(Joke joke, User user, Long rateId) throws NotFoundException, JsonProcessingException, NotAuthorizedException {
+        Rate rate = findJokeRating(rateId);
+        if(rate.getUser().getId().equals(user.getId())){
+            rateRepo.delete(rate);
+            return recalculateRates(joke);
+        }
+        throw new NotAuthorizedException("Insufficient privilege to delete the rating.");
+    }
+
     public Joke findById(Long id) throws NotFoundException {
         Optional<Joke> joke = jokeRepo.findById(id);
         if(joke.isPresent()){
             return joke.get();
         }
-        throw new NotFoundException("JOke with id " + id + " is not found.");
+        throw new NotFoundException("Joke with id " + id + " is not found.");
     }
 
     public List<Joke> findAll(){
@@ -65,6 +74,11 @@ public class JokeService {
     }
 
     public List<Rate> findJokeRatings(Joke joke){ return rateRepo.findAllByJoke(joke);}
+    public Rate findJokeRating(Long id) throws NotFoundException {
+        Optional<Rate> rate = rateRepo.findById(id);
+        if(rate.isPresent()) return rate.get();
+        throw new NotFoundException("Rating with id " + id + " is not found.");
+    }
 
     private String serializeHashMapToJson(HashMap<String, Integer> hashMap) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
