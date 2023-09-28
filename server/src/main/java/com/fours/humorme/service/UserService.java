@@ -1,6 +1,7 @@
 package com.fours.humorme.service;
 
 import com.fours.humorme.constants.ResponseMessage;
+import com.fours.humorme.dto.PostUserDto;
 import com.fours.humorme.dto.UserDto;
 import com.fours.humorme.exception.BadRequestException;
 import com.fours.humorme.exception.NotFoundException;
@@ -19,20 +20,25 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-    @Autowired  private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
-    @Autowired  private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired private AuthenticatedUserService authService;
 
-    public UserDto save(User user) throws BadRequestException {
+    @Autowired
+    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder){
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
-        Optional<User> savedUser = userRepository.findByEmail(user.getEmail());
+    public UserDto save(PostUserDto request) throws BadRequestException {
+
+        Optional<User> savedUser = userRepository.findByEmail(request.getEmail());
 
         if (savedUser.isPresent()) {
             throw new BadRequestException("User with provided email already exists.");
         } else {
-
+            User user = new User(request.getName(), request.getEmail(), request.getPassword());
             user.setIsEnabled(true);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             userRepository.save(user);

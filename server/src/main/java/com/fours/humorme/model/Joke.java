@@ -45,6 +45,10 @@ public class Joke {
 
     public Map<String, Integer> getLabelRatings() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(this.ratings, new TypeReference<HashMap<String, Integer>>() {});
+        try{
+            return objectMapper.readValue(this.ratings, new TypeReference<HashMap<String, Integer>>() {});
+        }catch (Exception err){
+            return new HashMap<>();
+        }
     }
 }

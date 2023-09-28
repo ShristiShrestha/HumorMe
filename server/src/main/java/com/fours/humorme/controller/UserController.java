@@ -3,6 +3,7 @@ package com.fours.humorme.controller;
 import com.fours.humorme.constants.AuthConstants;
 import com.fours.humorme.constants.ResponseMessage;
 import com.fours.humorme.constants.RoleConstants;
+import com.fours.humorme.dto.PostUserDto;
 import com.fours.humorme.dto.UserDto;
 import com.fours.humorme.exception.BadRequestException;
 import com.fours.humorme.model.User;
@@ -37,7 +38,7 @@ public class UserController {
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping(value = "/signup")
-    public ResponseEntity<?> save(@RequestBody User user) {
+    public ResponseEntity<?> save(@RequestBody PostUserDto user) {
         try {
             UserDto savedUser = userService.save(user);
 

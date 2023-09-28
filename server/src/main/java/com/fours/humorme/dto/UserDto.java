@@ -1,6 +1,7 @@
 package com.fours.humorme.dto;
 
 import com.fours.humorme.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,3 +28,5 @@ public class UserDto {
         this.createdAt = user.getCreatedAt();
     }
 }
+
+

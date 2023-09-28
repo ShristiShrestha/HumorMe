@@ -37,4 +37,10 @@ public class User {
     @Column(name = "created_at")
     @CreationTimestamp
     private Date createdAt;
+
+    public User(String name, String email, String password){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 }
