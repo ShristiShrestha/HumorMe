@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.fours</groupId>
-	<artifactId>online-scheduler-api</artifactId>
+	<artifactId>humorme-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>online-scheduler-api</name>
-	<description>CSC 7135 - Group project, 2023 Spring</description>
+	<description>Fall 2023 CSC 7510 - HumorMe</description>
 	<packaging>jar</packaging>
 	<properties>
 		<java.version>11</java.version>
@@ -89,7 +89,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.fours.onlineschedulerapi.OnlineSchedulerApiApplication</mainClass>
+					<mainClass>com.fours.humorme.HumorMeApplication</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>

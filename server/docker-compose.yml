@@ -1,16 +1,4 @@
 services:
-#  rabbitmq:
-#    container_name: rabbitmq
-#    image: rabbitmq:3.11-management
-#    networks:
-#      - scheduler-api-net
-#    expose:
-#      - 5672
-#      - 15672
-#    ports:
-#      - 15672:15672
-#    environment:
-#      - RABBIT_MQ_URL=rabbitmq
   db:
     image: postgres:latest
     restart: always
@@ -19,7 +7,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
 #    networks:
-#      - scheduler-api-net
+#      - humorme-api-net
     environment:
       - POSTGRES_DB_URL=db
       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
@@ -31,15 +19,12 @@ services:
 #    build: .
 #    ports:
 #      - 8080:8080
-#    environment:
-#      - RABBIT_MQ_URL=rabbitmq
-#      - POSTGRES_DB_URL=db
 #    networks:
-#      - scheduler-api-net
+#      - humorme-api-net
 volumes:
   db-data:
 secrets:
   db-password:
     file: password.txt
 #networks:
-#  scheduler-api-net:
+#  humorme-api-net:
