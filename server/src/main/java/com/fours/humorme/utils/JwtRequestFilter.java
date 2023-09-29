@@ -32,23 +32,37 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        final String cookie = request.getHeader("Cookie");
+        String cookie = request.getHeader("Cookie");
+        String authHeader = request.getHeader(COOKIE_TOKEN_PREFIX);
 
         String username = null;
         String jwtToken = null;
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
+
+        if(cookie == null && authHeader == null){
+            logger.warn("Cookie does not contains " + COOKIE_TOKEN_PREFIX);
+        }
         if (cookie != null && cookie.contains(COOKIE_TOKEN_PREFIX)) {
             jwtToken = CookieService.getTokenFromCookieString(cookie);
-            try {
-                username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get JWT Token");
-            } catch (ExpiredJwtException e) {
-                System.out.println("JWT Token has expired");
+        }
+
+        // if cookie does not have any jwt token,
+        // look in auth header
+        if(jwtToken == null && authHeader != null){
+            if(authHeader.contains("Bearer")){
+                jwtToken = authHeader.replace("Bearer ", "");
+            }else{
+                logger.warn("Req header does not contains " + COOKIE_TOKEN_PREFIX);
             }
-        } else {
-            logger.warn("Cookie does not contains " + COOKIE_TOKEN_PREFIX);
+        }
+
+        try {
+            username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Unable to get JWT Token");
+        } catch (ExpiredJwtException e) {
+            System.out.println("JWT Token has expired");
         }
 
         // Once we get the token validate it.

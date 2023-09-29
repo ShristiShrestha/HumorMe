@@ -45,6 +45,7 @@ public class AuthController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE,
                         CookieService.getResponseCookie("Bearer " + token, AuthConstants.JWT_TOKEN_VALIDITY).toString())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token) // add auth in response header, just in case
                 .build();
     }
 
