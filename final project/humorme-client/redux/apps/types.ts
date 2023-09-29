@@ -1,4 +1,5 @@
-import { UIAppDetail } from "../../models/dto/JokeDto";
+import { UIJokeDetails } from "../../models/dto/JokeDto";
+import { UICommentDetails } from "../../models/dto/CommentDto";
 
 export const FETCH_APPS = "FETCH_APPS";
 export const SEARCH_APPS = "SEARCH_APPS";
@@ -18,7 +19,7 @@ export type AppsState = {
     searchAppsById: {
         [appId: string]: any;
     };
-    app?: UIAppDetail;
-    appReviews?: any[];
+    app?: UIJokeDetails;
+    appReviews?: UICommentDetails[];
     appRateFeatures?: any;
 };

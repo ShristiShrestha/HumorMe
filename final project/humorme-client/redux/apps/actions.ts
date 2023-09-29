@@ -2,54 +2,31 @@ import { MyThunkDispatch } from "../common/types";
 import {
     FETCH_APP_REVIEWS,
     FETCH_APPS,
-    SEARCH_APPS,
     SET_APP,
     SET_APP_RATE_FEATURES,
     SET_APP_REVIEWS,
     SET_APPS,
-    SET_SEARCH_APPS,
 } from "./types";
-import { UIAppDetail } from "../../models/dto/JokeDto";
-import { getAppReviews, getApps } from "../../axios/AppsApi";
+import { UIJokeDetails } from "../../models/dto/JokeDto";
 import { actionFailure, actionStart, actionSuccess } from "../common/actions";
-import _ from "lodash";
-import { toUIAppsDetails } from "../../utils/AppsUtils";
 import myStore from "../store";
+import { getJokeComments, getJokes } from "../../axios/JokesApi";
 
 /****************** SET STATE ************************/
 
-export function setApps(
-    apps: UIAppDetail[],
-    lastPointer?: string,
-    isSearchRes = false,
-    clearExisting = false,
-) {
+export function setApps(apps: UIJokeDetails[]) {
     return (dispatch: MyThunkDispatch) => {
-        const mergedAppsWithExisting = reformatAppsByIds(
-            apps,
-            isSearchRes,
-            clearExisting,
-        );
-        if (isSearchRes) {
-            dispatch({
-                type: SET_SEARCH_APPS,
-                payload: {
-                    searchAppsById: mergedAppsWithExisting,
-                },
-            });
-        } else {
-            dispatch({
-                type: SET_APPS,
-                payload: {
-                    appsById: mergedAppsWithExisting,
-                    lastPointer: lastPointer,
-                },
-            });
-        }
+        const mergedAppsWithExisting = reformatAppsByIds(apps);
+        dispatch({
+            type: SET_APPS,
+            payload: {
+                appsById: mergedAppsWithExisting,
+            },
+        });
     };
 }
 
-export function setApp(app: UIAppDetail) {
+export function setApp(app: UIJokeDetails) {
     return (dispatch: MyThunkDispatch) => {
         dispatch({ type: SET_APP, payload: app });
     };
@@ -69,15 +46,13 @@ export function setAppReviews(appReviews: any[]) {
 
 /******************* FETCH from api ************************/
 
-export const fetchApps = (lastPointer?: string) => {
+export const fetchApps = (labels?: string) => {
     return (dispatch: MyThunkDispatch) => {
         dispatch(actionStart(FETCH_APPS));
-        getApps(undefined, lastPointer)
+        getJokes(labels)
             .then((appsRes: any) => {
-                const uiApps = toUIAppsDetails(_.get(appsRes, "apps", []));
-                const lastPointer = _.get(appsRes, "lastPointer", undefined);
-                dispatch(setApps(uiApps, lastPointer, false));
-                dispatch(actionSuccess(FETCH_APPS, uiApps));
+                dispatch(setApps(appsRes));
+                dispatch(actionSuccess(FETCH_APPS, appsRes));
             })
             .catch(err => {
                 dispatch(actionFailure(FETCH_APPS, err));
@@ -85,37 +60,13 @@ export const fetchApps = (lastPointer?: string) => {
     };
 };
 
-export const fetchSearchApps = (
-    query: string,
-    onSuccess?: Function,
-    onError?: Function,
-    onFinally?: Function,
-) => {
-    return (dispatch: MyThunkDispatch) => {
-        dispatch(actionStart(SEARCH_APPS));
-        getApps(undefined, undefined, query)
-            .then((appsRes: any) => {
-                const uiApps = toUIAppsDetails(_.get(appsRes, "apps", []));
-                dispatch(setApps(uiApps, undefined, true, true));
-                dispatch(actionSuccess(SEARCH_APPS, uiApps));
-                onSuccess && onSuccess();
-            })
-            .catch(err => {
-                dispatch(actionFailure(SEARCH_APPS, err));
-                onError && onError();
-            })
-            .finally(() => onFinally && onFinally());
-    };
-};
-
-export const fetchAppReviews = (appId: string) => {
+export const fetchAppReviews = (jokeId: number) => {
     return (dispatch: MyThunkDispatch) => {
         dispatch(actionStart(FETCH_APP_REVIEWS));
-        getAppReviews(appId)
-            .then((appRevRes: any) => {
-                const reviews = _.get(appRevRes, "reviews", []);
-                dispatch(setAppReviews(reviews));
-                dispatch(actionSuccess(FETCH_APP_REVIEWS, appRevRes));
+        getJokeComments(jokeId)
+            .then((comments: any) => {
+                dispatch(setAppReviews(comments));
+                dispatch(actionSuccess(FETCH_APP_REVIEWS, comments));
             })
             .catch(err => {
                 dispatch(actionFailure(FETCH_APP_REVIEWS, err));
@@ -124,24 +75,12 @@ export const fetchAppReviews = (appId: string) => {
 };
 
 /******************* internal utils ************************/
-export const reformatAppsByIds = (
-    newApps: UIAppDetail[],
-    isSearchRes: boolean,
-    clearExisting: boolean,
-) => {
-    let existingApps = {};
-
-    if (!clearExisting) {
-        if (isSearchRes) {
-            existingApps = myStore.getState()?.apps?.searchAppsById || {};
-        } else {
-            existingApps = myStore.getState()?.apps?.appsById || {};
-        }
-    }
+export const reformatAppsByIds = (newApps: UIJokeDetails[]) => {
+    let existingApps = myStore.getState()?.apps?.appsById || {};
 
     for (let index = 0; index < newApps.length; index++) {
         const appInfo = newApps[index];
-        existingApps[appInfo.appId] = appInfo;
+        existingApps[appInfo.id] = appInfo;
     }
     return existingApps;
 };

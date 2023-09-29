@@ -10,7 +10,7 @@ import { RootState } from "../common/types";
 import { ALL_JOKES } from "../../data/jokes";
 
 const initialState: AppsState = {
-    appsById: ALL_JOKES,
+    appsById: {}, //ALL_JOKES,
     searchAppsById: {},
 };
 

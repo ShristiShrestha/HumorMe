@@ -1,15 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { selectApps } from "../redux/apps/reducer";
-import React, { useCallback, useEffect } from "react";
-import { setApp, setAppRateFeatures } from "../redux/apps/actions";
-import { debounceFuncs } from "../utils/LodashUtils";
-import { getAppRateFeatures, getApps } from "../axios/AppsApi";
-import { toUIAppDetail } from "../utils/AppsUtils";
+import React from "react";
 import { useRouter } from "next/router";
-import { UserRole } from "../functions/src/utils/Users";
-import _ from "lodash";
 import { selectAuth } from "../redux/auth/reducer";
-import { UIJokeDetails } from "../models/dto/JokeDto";
 
 const withAppLoad = WrappedComponent => {
     // eslint-disable-next-line react/display-name
@@ -46,35 +39,6 @@ const withAppLoad = WrappedComponent => {
         //     [id],
         // );
 
-        const callbackLoadRateFeatures = useCallback(() => {
-            if (
-                id &&
-                id?.toString()?.length > 0 &&
-                user?.role === UserRole.EXPERIMENT
-            ) {
-                getAppRateFeatures(id?.toString())
-                    .then(res => {
-                        // @ts-ignore
-                        dispatch(setAppRateFeatures(res));
-                    })
-                    .catch(err => {
-                        const status = _.get(err, "response.status", undefined);
-                        if (status)
-                            console.error(
-                                "Error fetching rate features: ",
-                                status,
-                                err,
-                            );
-                        // if rate feature responded nth
-                        // and redux has rate features of other app
-                        if (id && appRateFeatures?.appId !== id?.toString()) {
-                            // @ts-ignore
-                            dispatch(setAppRateFeatures({}));
-                        }
-                    });
-            }
-        }, [id, user?.role]);
-
         // const callbackLoadAppReviews = useCallback(() => {
         //     if (id && id?.toString()?.length > 0) {
         //         // @ts-ignore
@@ -92,14 +56,6 @@ const withAppLoad = WrappedComponent => {
         //         }),
         //     [id],
         // );
-
-        useEffect(
-            () =>
-                debounceFuncs(() => {
-                    callbackLoadRateFeatures();
-                }),
-            [id, user?.role],
-        );
 
         /******************* render ************************/
 

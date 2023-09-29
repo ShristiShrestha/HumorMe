@@ -5,3 +5,14 @@ export type UIUserDetails = {
     isEnabled: boolean;
     createdAt: Date;
 };
+
+export type PostUserDto = {
+    name: string;
+    email: string;
+    password: string;
+};
+
+export type LoginUserDto = {
+    email: string;
+    password: string;
+};

@@ -54,7 +54,7 @@ export default function JokeCard(props: Props) {
 
     const maxRating = useMemo(
         () =>
-            Object.entries(joke.ratings).sort(
+            Object.entries(joke.labelRatings).sort(
                 (firstItem, secondItem) => secondItem[1] - firstItem[1],
             )[0],
         [joke.title],
@@ -77,7 +77,7 @@ export default function JokeCard(props: Props) {
             </div>
             <div className={"vertical-start-flex joke-ratings"}>
                 <ResText16Regular className={"text-grey2 text-italic"}>
-                    {maxRating[1]} found this {maxRating[0]}
+                    {/*{maxRating[1]} found this {maxRating[0]}*/}
                 </ResText16Regular>
                 <LeaveJokeRatings />
             </div>
