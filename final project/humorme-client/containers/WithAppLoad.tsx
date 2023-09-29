@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { UserRole } from "../functions/src/utils/Users";
 import _ from "lodash";
 import { selectAuth } from "../redux/auth/reducer";
-import { UIAppDetail } from "../models/dto/JokeDto";
+import { UIJokeDetails } from "../models/dto/JokeDto";
 
 const withAppLoad = WrappedComponent => {
     // eslint-disable-next-line react/display-name
@@ -22,29 +22,29 @@ const withAppLoad = WrappedComponent => {
 
         /******************* memoized callbacks ************************/
 
-        const callbackLoadApp = useCallback(
-            (paramsApps: { [id: string]: UIAppDetail }) => {
-                if (id !== app?.appId) {
-                    const filteredApps: UIAppDetail[] = Object.values(
-                        paramsApps,
-                    ).filter((item: any) => item.appId === id);
-                    if (filteredApps.length > 0) {
-                        const filteredApp: UIAppDetail = filteredApps[0];
-                        filteredApp?.appId === id &&
-                            // @ts-ignore
-                            dispatch(setApp(filteredApp));
-                    } else {
-                        //@ts-ignore
-                        getApps(id).then(
-                            resApp =>
-                                resApp?.appId === id && // @ts-ignore
-                                dispatch(setApp(toUIAppDetail(resApp))),
-                        );
-                    }
-                }
-            },
-            [id],
-        );
+        // const callbackLoadApp = useCallback(
+        //     (paramsApps: { [id: string]: UIAppDetail }) => {
+        //         if (id !== app?.appId) {
+        //             const filteredApps: UIAppDetail[] = Object.values(
+        //                 paramsApps,
+        //             ).filter((item: any) => item.appId === id);
+        //             if (filteredApps.length > 0) {
+        //                 const filteredApp: UIAppDetail = filteredApps[0];
+        //                 filteredApp?.appId === id &&
+        //                     // @ts-ignore
+        //                     dispatch(setApp(filteredApp));
+        //             } else {
+        //                 //@ts-ignore
+        //                 getApps(id).then(
+        //                     resApp =>
+        //                         resApp?.appId === id && // @ts-ignore
+        //                         dispatch(setApp(toUIAppDetail(resApp))),
+        //                 );
+        //             }
+        //         }
+        //     },
+        //     [id],
+        // );
 
         const callbackLoadRateFeatures = useCallback(() => {
             if (
@@ -83,15 +83,15 @@ const withAppLoad = WrappedComponent => {
         // }, [id]);
         //
         /******************* use effects ************************/
-
-        useEffect(
-            () =>
-                debounceFuncs(() => {
-                    callbackLoadApp(appsById);
-                    // callbackLoadAppReviews();
-                }),
-            [id],
-        );
+        //
+        // useEffect(
+        //     () =>
+        //         debounceFuncs(() => {
+        //             callbackLoadApp(appsById);
+        //             // callbackLoadAppReviews();
+        //         }),
+        //     [id],
+        // );
 
         useEffect(
             () =>
