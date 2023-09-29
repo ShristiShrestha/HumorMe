@@ -4,6 +4,10 @@ import { JokeRatingLevels } from "../models/enum/JokeEnum";
 import { ResText14Regular } from "../utils/TextUtils";
 import { grey2, grey6, pearl } from "../utils/ShadesUtils";
 import MyButton, { MyButtonType } from "./MyButton";
+import { postJokeRating } from "../axios/JokesApi";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { setApp } from "../redux/apps/actions";
 
 const Wrapper = styled.div`
     position: relative;
@@ -28,6 +32,15 @@ const ClickItem = styled.div`
     }
 `;
 export default function LeaveJokeRatings() {
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const { id } = router.query;
+    const handleRating = (e, label: JokeRatingLevels) => {
+        e.preventDefault();
+        e.stopPropagation();
+        // @ts-ignore
+        postJokeRating(id, label).then(joke => dispatch(setApp(joke)));
+    };
     return (
         <Wrapper className={"h-justified-flex"}>
             <div className={"h-start-flex leave-ratings"}>
@@ -35,7 +48,10 @@ export default function LeaveJokeRatings() {
                     Rate this{" "}
                 </ResText14Regular>
                 {Object.values(JokeRatingLevels).map(item => (
-                    <ClickItem key={"rate-level-" + item}>
+                    <ClickItem
+                        key={"rate-level-" + item}
+                        onClick={e => handleRating(e, item)}
+                    >
                         <ResText14Regular>
                             {item.toLowerCase()}
                         </ResText14Regular>
