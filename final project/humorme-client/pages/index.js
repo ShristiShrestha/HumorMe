@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import JokesList from "../containers/jokes/JokesList";
+import { useSelector } from "react-redux";
+import { selectAuth } from "../redux/auth/reducer";
+import MyButton, { MyButtonType } from "../components/MyButton";
+import PostJoke from "../containers/jokes/PostJoke";
 
 /* styled components */
 const Wrapper = styled.div.attrs({
@@ -13,6 +17,7 @@ const Wrapper = styled.div.attrs({
 `;
 
 export default function Home() {
+    const { loggedIn } = useSelector(selectAuth);
     // const [loading, setLoading] = useState(true);
 
     // useEffect(() => {
@@ -84,6 +89,7 @@ export default function Home() {
 
     return (
         <Wrapper>
+            {loggedIn && <PostJoke />}
             <JokesList />
         </Wrapper>
     );

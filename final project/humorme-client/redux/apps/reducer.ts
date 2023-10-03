@@ -12,6 +12,7 @@ import { ALL_JOKES } from "../../data/jokes";
 const initialState: AppsState = {
     appsById: {}, //ALL_JOKES,
     searchAppsById: {},
+    appReviews: [],
 };
 
 export const selectApps = (state: RootState) => state.apps;

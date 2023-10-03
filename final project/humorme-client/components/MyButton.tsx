@@ -116,7 +116,7 @@ export default function MyButton(props: Props) {
         // onClick();
         debounceFuncs(async () => {
             await onClick();
-            setTimeout(() => setLoading(false), 1000);
+            setTimeout(() => setLoading(false), 500);
         });
     };
 
@@ -149,6 +149,7 @@ export default function MyButton(props: Props) {
     return (
         <Wrapper width={btnStyle.width}>
             <Button
+                htmlType={"submit"}
                 style={btnStyle}
                 onClick={e => !isLoading && handleOnClick(e)}
                 disabled={isDisabled || (isLoading && showLoading)}

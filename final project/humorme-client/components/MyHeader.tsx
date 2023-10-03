@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { setAuth } from "../redux/auth/actions";
 import { verifyJwt } from "../utils/JwtUtils";
+import LoginView from "../containers/login/LoginView";
 
 const Wrapper = styled.div`
     align-items: center;
@@ -81,12 +82,12 @@ export function MyHeader() {
             setLocalAuthJwt(jwtWithoutBearer);
         }
     }, []);
-
-    useEffect(() => {
-        if (localAuthJwt !== null && !loggedIn && !user) {
-            updateUserCallback();
-        }
-    }, [localAuthJwt]);
+    //
+    // useEffect(() => {
+    //     if (localAuthJwt !== null && !loggedIn && !user) {
+    //         updateUserCallback();
+    //     }
+    // }, [localAuthJwt]);
 
     return (
         <Wrapper className={"h-justified-flex custom-layout"}>
@@ -95,6 +96,7 @@ export function MyHeader() {
                     HumorMe
                 </ResText18SemiBold>
             </Link>
+            <LoginView />
         </Wrapper>
     );
 }

@@ -13,7 +13,7 @@ import {
 import { selectAuth } from "../../redux/auth/reducer";
 import { ELEMENT_ON_ACTION } from "../../models/enum/UIRateFeatureEnum";
 import { logAppSearch, logPageView } from "../../models/dto/GAEventLogger";
-import { fetchApps, fetchSearchApps } from "../../redux/apps/actions";
+import { fetchApps } from "../../redux/apps/actions";
 import JokeCard from "../../components/JokeCard";
 
 const Wrapper = styled.div.attrs({
@@ -75,7 +75,12 @@ export default function JokesList() {
     );
 
     const reduxApps = useMemo(
-        () => Object.values(appsById) || [],
+        () =>
+            Object.values(appsById).sort(
+                (first, second) =>
+                    new Date(second["createdAt"]).getTime() -
+                    new Date(first["createdAt"]).getTime(),
+            ) || [],
         [Object.keys(appsById)],
     );
 

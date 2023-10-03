@@ -11,6 +11,7 @@ import { UIJokeDetails } from "../../models/dto/JokeDto";
 import { actionFailure, actionStart, actionSuccess } from "../common/actions";
 import myStore from "../store";
 import { getJokeComments, getJokes } from "../../axios/JokesApi";
+import { sort } from "next/dist/build/webpack/loaders/css-loader/src/utils";
 
 /****************** SET STATE ************************/
 

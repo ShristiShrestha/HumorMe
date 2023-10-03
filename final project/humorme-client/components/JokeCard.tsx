@@ -79,7 +79,7 @@ export default function JokeCard(props: Props) {
                 <ResText16Regular className={"text-grey2 text-italic"}>
                     {/*{maxRating[1]} found this {maxRating[0]}*/}
                 </ResText16Regular>
-                <LeaveJokeRatings />
+                <LeaveJokeRatings joke={joke} />
             </div>
         </Wrapper>
     );

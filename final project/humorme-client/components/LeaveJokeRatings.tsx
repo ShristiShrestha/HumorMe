@@ -6,8 +6,11 @@ import { grey2, grey6, pearl } from "../utils/ShadesUtils";
 import MyButton, { MyButtonType } from "./MyButton";
 import { postJokeRating } from "../axios/JokesApi";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setApp } from "../redux/apps/actions";
+import { UIJokeDetails } from "../models/dto/JokeDto";
+import { selectAuth } from "../redux/auth/reducer";
+import CommentJoke from "../containers/jokes/CommentJoke";
 
 const Wrapper = styled.div`
     position: relative;
@@ -31,16 +34,17 @@ const ClickItem = styled.div`
         cursor: pointer;
     }
 `;
-export default function LeaveJokeRatings() {
-    const router = useRouter();
+export default function LeaveJokeRatings({ joke }) {
     const dispatch = useDispatch();
-    const { id } = router.query;
+    const { id } = joke;
+
     const handleRating = (e, label: JokeRatingLevels) => {
         e.preventDefault();
         e.stopPropagation();
         // @ts-ignore
         postJokeRating(id, label).then(joke => dispatch(setApp(joke)));
     };
+
     return (
         <Wrapper className={"h-justified-flex"}>
             <div className={"h-start-flex leave-ratings"}>
@@ -58,11 +62,7 @@ export default function LeaveJokeRatings() {
                     </ClickItem>
                 ))}
             </div>
-            <MyButton
-                text={"comment"}
-                btnType={MyButtonType.secondary}
-                onClick={() => {}}
-            />
+            <CommentJoke joke={joke} />
         </Wrapper>
     );
 }
