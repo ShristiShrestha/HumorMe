@@ -16,8 +16,12 @@ import { ResText16SemiBold } from "../../utils/TextUtils";
 
 const Wrapper = styled.div`
     width: 100%;
+
+    .write-comment {
+        margin-top: 12px;
+    }
     .view-comments {
-        row-gap: 16px;
+        row-gap: 20px;
     }
 `;
 
@@ -26,11 +30,19 @@ export default function ViewComments() {
     const router = useRouter();
     const dispatch = useDispatch();
     const { id } = router.query;
-    const { loggedIn } = useSelector(selectAuth);
+    const { loggedIn, user } = useSelector(selectAuth);
     const { app, appReviews } = useSelector(selectApps);
 
     /******************* handlers ************************/
     const submitComment = data => {
+        if (data.text?.length() < 1) {
+            return openNotification(
+                "Empty comments",
+                "Say something or not.",
+                NotificationEnum.WARNING,
+            );
+        }
+
         postJokeComment(id, {
             text: data.text,
         })
@@ -56,35 +68,37 @@ export default function ViewComments() {
 
     return (
         <Wrapper className={"vertical-start-flex"}>
-            <div className={"vertical-start-flex"}>
-                <Form
-                    layout={"vertical"}
-                    initialValues={{ text: "" }}
-                    onFinish={submitComment}
-                    style={{ width: "100%" }}
-                >
-                    <Form.Item
-                        label="Post your comment"
-                        name="text"
-                        rules={[
-                            {
-                                required: true,
-                                message: "You've gotta write something!",
-                            },
-                        ]}
+            {loggedIn && user?.id && (
+                <div className={"vertical-start-flex write-comment"}>
+                    <Form
+                        layout={"vertical"}
+                        initialValues={{ text: "" }}
+                        onFinish={submitComment}
+                        style={{ width: "100%" }}
                     >
-                        <TextArea
-                            placeholder="Maximum of 250 characters"
-                            autoSize={{ minRows: 3, maxRows: 5 }}
-                        />
-                    </Form.Item>
-                    <Form.Item className={"h-end-flex"}>
-                        <Button htmlType={"submit"} type={"primary"}>
-                            Comment
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </div>
+                        <Form.Item
+                            label="Anything to say about this joke?"
+                            name="text"
+                            rules={[
+                                {
+                                    required: false,
+                                    message: "You've gotta write something!",
+                                },
+                            ]}
+                        >
+                            <TextArea
+                                placeholder="Maximum of 250 characters"
+                                autoSize={{ minRows: 3, maxRows: 5 }}
+                            />
+                        </Form.Item>
+                        <Form.Item className={"h-end-flex"}>
+                            <Button htmlType={"submit"} type={"primary"}>
+                                Comment
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </div>
+            )}
             <div className={"vertical-start-flex view-comments"}>
                 <ResText16SemiBold>All comments</ResText16SemiBold>
                 <div className={"vertical-start-flex"}>

@@ -34,3 +34,11 @@ export const getUser = (id: number) => {
         method: "GET",
     });
 };
+
+export const patchUser = (request: any) => {
+    return Api.apiCall({
+        url: `/users`,
+        method: "PATCH",
+        data: request,
+    });
+};

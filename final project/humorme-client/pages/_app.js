@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import { Provider } from "react-redux";
 import store from "../redux/store";
 
@@ -9,8 +9,6 @@ import { Layout } from "antd";
 import { MyHeader } from "../components/MyHeader";
 import styled from "styled-components";
 import withAppsLoad from "../containers/WithAppsLoad";
-import { initGoogleAnalytics } from "../utils/GoogleAnalyticsUtils";
-import { debounceFuncs } from "../utils/LodashUtils";
 import withUserAuthenticated from "../hooks/withUserAuthenticated";
 
 const MyContent = styled.div.attrs({
@@ -22,7 +20,6 @@ const MyContent = styled.div.attrs({
 const { Header, Footer, Content } = Layout;
 
 function MyApp({ Component, pageProps }) {
-    // const router = useRouter();
     const WrappedComponent = withAppsLoad(withUserAuthenticated(Component));
 
     /******************* render ************************/

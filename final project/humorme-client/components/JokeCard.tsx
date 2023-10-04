@@ -15,7 +15,7 @@ import Link from "next/link";
 
 const Wrapper = styled.div`
     width: 100%;
-    row-gap: 24px;
+    row-gap: 32px;
     column-gap: 24px;
     align-items: flex-start;
     color: ${grey1};
@@ -29,14 +29,14 @@ const Wrapper = styled.div`
 
     .joke-content {
         justify-content: start;
-        row-gap: 12px;
+        row-gap: 16px;
         text-align: justify;
         column-gap: 12px;
     }
 
     .joke-ratings {
-        column-gap: 12px;
-        row-gap: 16px;
+        column-gap: 16px;
+        row-gap: 20px;
         width: 100%;
     }
 

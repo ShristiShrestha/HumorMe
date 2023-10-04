@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { ResText16Regular } from "../../../utils/TextUtils";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
@@ -9,6 +9,8 @@ import MyEmptyView from "../../../components/MyEmtpyView";
 import withAppLoad from "../../../containers/WithAppLoad";
 import ViewComments from "../../../containers/comments/ViewComments";
 import JokeCard from "../../../components/JokeCard";
+import { useRouter } from "next/router";
+import { isString } from "lodash";
 
 const Wrapper = styled.div.attrs({
     className: "vertical-start-flex",
@@ -36,20 +38,26 @@ export const BackIconWithText = (backTo: string, title?: string) => (
 );
 
 function Page() {
-    const { app, myJokesRatingsByIds } = useSelector(selectApps);
+    const router = useRouter();
+    const { id } = router.query;
+    const { app, myJokesRatingsByIds, appsById } = useSelector(selectApps);
+    const viewJoke = useMemo(
+        () => (id ? appsById[parseInt(id?.toString())] || app : app),
+        [id, app?.id, Object.keys(appsById)],
+    );
 
-    if (!app?.id) return <MyEmptyView showAsLoading={true} />;
+    if (viewJoke == undefined) return <MyEmptyView showAsLoading={true} />;
 
     return (
         <Wrapper>
             {BackIconWithText("/")}
             <JokeCard
-                joke={app}
+                joke={viewJoke}
                 showViewComments={false}
                 myRating={
                     myJokesRatingsByIds &&
                     Object.keys(myJokesRatingsByIds).length > 0
-                        ? myJokesRatingsByIds[app.id]
+                        ? myJokesRatingsByIds[viewJoke.id]
                         : undefined
                 }
             />
