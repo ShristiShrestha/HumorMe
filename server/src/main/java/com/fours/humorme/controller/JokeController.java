@@ -75,4 +75,11 @@ public class JokeController {
         List<Rate> jokeRatings = jokeService.findJokeRatings(joke);
         return new ResponseEntity<>(jokeRatings, HttpStatus.OK);
     }
+
+    @GetMapping("/ratings")
+    public ResponseEntity<List<Rate>> getLoggedUserRatings() throws NotFoundException {
+        User user = userService.getAuthenticatedUser();
+        List<Rate> jokeRatings = jokeService.findMyJokeRatings(user);
+        return new ResponseEntity<>(jokeRatings, HttpStatus.OK);
+    }
 }

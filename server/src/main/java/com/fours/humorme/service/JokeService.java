@@ -33,11 +33,22 @@ public class JokeService {
     }
 
     public Rate rate(Joke joke, User user, String label) throws JsonProcessingException {
-        Rate rate = new Rate(joke, user, label);
+
+        List<Rate> existingUserJokeRating = rateRepo.findAllByUser_Id_AndJoke_Id(user.getId(), joke.getId());
+        Rate rate;
+
+        if(existingUserJokeRating.isEmpty()){
+            rate = new Rate(joke, user, label);
+        }else{
+            rate = existingUserJokeRating.get(existingUserJokeRating.size() - 1);
+
+        }
+
         rate = rateRepo.save(rate);
         Joke updatedJoke = recalculateRates(joke);
         rate.setJoke(updatedJoke);
         return rate;
+
     }
 
     public void delete(Long jokeId, User user) throws NotFoundException, NotAuthorizedException {
@@ -74,6 +85,11 @@ public class JokeService {
     }
 
     public List<Rate> findJokeRatings(Joke joke){ return rateRepo.findAllByJoke(joke);}
+
+    public List<Rate> findMyJokeRatings(User user){
+        return rateRepo.findAllByUser_Id(user.getId());
+    }
+
     public Rate findJokeRating(Long id) throws NotFoundException {
         Optional<Rate> rate = rateRepo.findById(id);
         if(rate.isPresent()) return rate.get();
