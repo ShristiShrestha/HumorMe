@@ -21,11 +21,10 @@ export const login = (request: LoginUserDto) => {
     });
 };
 
-export const postUserSignIn = (data: any) => {
-    return Api.apiCall({
-        url: "/apiPostUserSignIn",
-        method: "POST",
-        data: data,
+export const checkLogin = () => {
+    return Api.apiCall<UIUserDetails>({
+        url: "/auth/profile",
+        method: "GET",
     });
 };
 

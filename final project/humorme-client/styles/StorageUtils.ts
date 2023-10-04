@@ -11,7 +11,7 @@ export const genRandom = () => {
 // const APP_DOMAINS = ["investing", "ride_sharing", "mental_health"];
 //
 // // eslint-disable-next-line max-len
-// /** ***************** Fetch apps details from firebase storage ************************/
+// /** ***************** Fetch jokes details from firebase storage ************************/
 // const getAllAppDetails = async () => {
 //   const appDetailsData: [] = [];
 //
@@ -81,26 +81,26 @@ export const genRandom = () => {
 // /** ***************** Realtime DB ************************/
 // // const saveAppDetailsToDb = (data: any[]) => {
 // //     if (firebaseDb != null) {
-// //         const appRef = dbRef(firebaseDb, "apps");
+// //         const appRef = dbRef(firebaseDb, "jokes");
 // //         // Retrieve data from the database
 // //         dbGetRef(appRef)
 // //             .then(snapshot => {
-// //                 const apps = snapshot.val();
-// //                 console.log("db apps: ", apps);
-// //                 return apps;
+// //                 const jokes = snapshot.val();
+// //                 console.log("db jokes: ", jokes);
+// //                 return jokes;
 // //             })
-// //             .then(apps => {
-// //                 const dbAppsIds = apps.map(apps => apps.id);
+// //             .then(jokes => {
+// //                 const dbAppsIds = jokes.map(jokes => jokes.id);
 // //                 const dataNotInApps = data.filter(
 // //                     row => !dbAppsIds.includes(row.id),
 // //                 );
 // //                 // Add data to the database
 // //                 dbUpdate(appRef, dataNotInApps).then(res => {
-// //                     console.log("successfully set apps.", res);
+// //                     console.log("successfully set jokes.", res);
 // //                 });
 // //             })
 // //             .catch(err => {
-// //                 console.log("failed to fetch apps: ", err);
+// //                 console.log("failed to fetch jokes: ", err);
 // //             });
 // //     } else {
 // //         console.error("[FIREBASE] Failed to get realtime database.");
@@ -112,9 +112,9 @@ export const genRandom = () => {
 // // @ts-ignore
 // const saveAppDetailsToFirestore = async (data: any[]) => {
 //   if (firestore != null) {
-//     const apps = await getAppDetailsFromFirestore();
-//     if (apps) {
-//       // const dbAppsIds = apps.map(apps => apps.id);
+//     const jokes = await getAppDetailsFromFirestore();
+//     if (jokes) {
+//       // const dbAppsIds = jokes.map(jokes => jokes.id);
 //       // const dataNotInApps = data.filter(
 //       //     row => !dbAppsIds.includes(row.id),
 //       // );
@@ -126,9 +126,9 @@ export const genRandom = () => {
 //       console.log("[FIREBASE] Document user written: ", docRef);
 //
 //       // const batch = writeBatch(firestore);
-//       // dataNotInApps.forEach(apps => {
-//       //     const appRef = firestoreDoc(collection(firestore, "apps"));
-//       //     batch.set(appRef, apps);
+//       // dataNotInApps.forEach(jokes => {
+//       //     const appRef = firestoreDoc(collection(firestore, "jokes"));
+//       //     batch.set(appRef, jokes);
 //       // });
 //       // await batch.commit();
 //       // console.log(
@@ -142,12 +142,12 @@ export const genRandom = () => {
 // // @ts-ignore
 // const getAppDetailsFromFirestore = async () => {
 //   try {
-//     const querySnapshot = await getDocs(collection(firestore, "apps"));
+//     const querySnapshot = await getDocs(collection(firestore, "jokes"));
 //     const appsDetailsList = querySnapshot.docs.map((doc) => doc.data());
 //     console.log("App details from firestore:", appsDetailsList);
 //     return appsDetailsList;
 //   } catch (error) {
-//     console.error("Error getting apps details from firestore:", error);
+//     console.error("Error getting jokes details from firestore:", error);
 //   }
 // };
 //

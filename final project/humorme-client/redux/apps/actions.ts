@@ -1,17 +1,25 @@
 import { MyThunkDispatch } from "../common/types";
 import {
+    FETCH_APP,
     FETCH_APP_REVIEWS,
     FETCH_APPS,
+    FETCH_MY_JOKE_RATINGS,
     SET_APP,
     SET_APP_RATE_FEATURES,
     SET_APP_REVIEWS,
     SET_APPS,
+    SET_MY_JOKE_RATINGS,
 } from "./types";
 import { UIJokeDetails } from "../../models/dto/JokeDto";
 import { actionFailure, actionStart, actionSuccess } from "../common/actions";
 import myStore from "../store";
-import { getJokeComments, getJokes } from "../../axios/JokesApi";
-import { sort } from "next/dist/build/webpack/loaders/css-loader/src/utils";
+import {
+    getJoke,
+    getJokeComments,
+    getJokes,
+    getMyJokeRatings,
+} from "../../axios/JokesApi";
+import { UICommentDetails, UIRatingDetails } from "../../models/dto/CommentDto";
 
 /****************** SET STATE ************************/
 
@@ -22,6 +30,18 @@ export function setApps(apps: UIJokeDetails[]) {
             type: SET_APPS,
             payload: {
                 appsById: mergedAppsWithExisting,
+            },
+        });
+    };
+}
+
+export function setMyJokeRatings(myRatings: UIRatingDetails[]) {
+    return (dispatch: MyThunkDispatch) => {
+        const ratingsByIds = reformatRatingsByJokeIds(myRatings);
+        dispatch({
+            type: SET_MY_JOKE_RATINGS,
+            payload: {
+                myJokesRatingsByIds: ratingsByIds,
             },
         });
     };
@@ -46,6 +66,19 @@ export function setAppReviews(appReviews: any[]) {
 }
 
 /******************* FETCH from api ************************/
+export const fetchApp = id => {
+    return (dispatch: MyThunkDispatch) => {
+        dispatch(actionStart(FETCH_APP));
+        getJoke(id)
+            .then(jokeRes => {
+                dispatch(setApp(jokeRes));
+                dispatch(actionSuccess(FETCH_APP, jokeRes));
+            })
+            .catch(err => {
+                dispatch(actionFailure(FETCH_APP, err));
+            });
+    };
+};
 
 export const fetchApps = (labels?: string) => {
     return (dispatch: MyThunkDispatch) => {
@@ -61,13 +94,32 @@ export const fetchApps = (labels?: string) => {
     };
 };
 
+export const fetchMyJokeRatings = () => {
+    return (dispatch: MyThunkDispatch) => {
+        dispatch(actionStart(FETCH_MY_JOKE_RATINGS));
+        getMyJokeRatings()
+            .then((myRatings: UIRatingDetails[]) => {
+                dispatch(setMyJokeRatings(myRatings));
+                dispatch(actionSuccess(FETCH_MY_JOKE_RATINGS, myRatings));
+            })
+            .catch(err => {
+                dispatch(actionFailure(FETCH_MY_JOKE_RATINGS, err));
+            });
+    };
+};
+
 export const fetchAppReviews = (jokeId: number) => {
     return (dispatch: MyThunkDispatch) => {
         dispatch(actionStart(FETCH_APP_REVIEWS));
         getJokeComments(jokeId)
-            .then((comments: any) => {
-                dispatch(setAppReviews(comments));
-                dispatch(actionSuccess(FETCH_APP_REVIEWS, comments));
+            .then((comments: UICommentDetails[]) => {
+                const sortedComments = comments.sort(
+                    (first, second) =>
+                        new Date(second.createdAt).getTime() -
+                        new Date(first.createdAt).getTime(),
+                );
+                dispatch(setAppReviews(sortedComments));
+                dispatch(actionSuccess(FETCH_APP_REVIEWS, sortedComments));
             })
             .catch(err => {
                 dispatch(actionFailure(FETCH_APP_REVIEWS, err));
@@ -84,4 +136,14 @@ export const reformatAppsByIds = (newApps: UIJokeDetails[]) => {
         existingApps[appInfo.id] = appInfo;
     }
     return existingApps;
+};
+
+export const reformatRatingsByJokeIds = (newMyRatings: UIRatingDetails[]) => {
+    let existingMyRatings = myStore.getState()?.apps?.myJokesRatingsByIds || {};
+
+    for (let index = 0; index < newMyRatings.length; index++) {
+        const appInfo = newMyRatings[index];
+        existingMyRatings[appInfo.joke.id] = appInfo;
+    }
+    return existingMyRatings;
 };

@@ -1,18 +1,14 @@
 import React from "react";
-import AppInfo from "../../../containers/app/AppInfo";
 import { ResText16Regular } from "../../../utils/TextUtils";
-import AppRatingsReviews from "../../../containers/app/AppRatingsReviews";
 import styled from "styled-components";
-import { Divider } from "antd";
 import { useSelector } from "react-redux";
 import { selectApps } from "../../../redux/apps/reducer";
 import Link from "next/link";
 import { LeftOutlined } from "@ant-design/icons";
-import AppScreenshots from "../../../containers/app/AppScreenshots";
-import AppDesc from "../../../containers/app/AppDesc";
-import AppExtraInfo from "../../../containers/app/AppExtraInfo";
 import MyEmptyView from "../../../components/MyEmtpyView";
 import withAppLoad from "../../../containers/WithAppLoad";
+import ViewComments from "../../../containers/comments/ViewComments";
+import JokeCard from "../../../components/JokeCard";
 
 const Wrapper = styled.div.attrs({
     className: "vertical-start-flex",
@@ -40,35 +36,28 @@ export const BackIconWithText = (backTo: string, title?: string) => (
 );
 
 function Page() {
-    const { app } = useSelector(selectApps);
+    const { app, myJokesRatingsByIds } = useSelector(selectApps);
 
-    if (!app?.appId) return <MyEmptyView showAsLoading={true} />;
+    if (!app?.id) return <MyEmptyView showAsLoading={true} />;
 
     return (
         <Wrapper>
             {BackIconWithText("/")}
-            <AppInfo showRatings={true} />
-            <Divider type={"horizontal"} />
-            <AppScreenshots />
-            <Divider type={"horizontal"} />
-            <AppDesc />
-            <Divider type={"horizontal"} />
-            <AppRatingsReviews />
-            <Divider type={"horizontal"} />
-            <AppExtraInfo />
+            <JokeCard
+                joke={app}
+                showViewComments={false}
+                myRating={
+                    myJokesRatingsByIds &&
+                    Object.keys(myJokesRatingsByIds).length > 0
+                        ? myJokesRatingsByIds[app.id]
+                        : undefined
+                }
+            />
+
+            <ViewComments />
         </Wrapper>
     );
 }
 
 const WrappedPage = withAppLoad(Page);
 export default WrappedPage;
-// export async function getServerSideProps(context) {
-//     return {
-//         props: {},
-//         // Disable server-side rendering for this page
-//         // You can also try setting revalidate to a higher value
-//         // if you want to use ISR (Incremental Static Regeneration)
-//         // revalidate: 60
-//         notFound: true, // Or use `notFound` if appropriate
-//     };
-// }

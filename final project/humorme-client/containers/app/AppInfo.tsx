@@ -88,7 +88,7 @@ export default function AppInfo(props: PropTypes) {
                 loader={() => app?.meta?.appIconUrl || ""}
             />
             <Card className={"vertical-start-flex"}>
-                <div className={"vertical-start-flex apps-names"}>
+                <div className={"vertical-start-flex jokes-names"}>
                     <ResText20SemiBold className={"text-grey1"}>
                         {capitalize(app?.name, true)}
                     </ResText20SemiBold>
@@ -101,14 +101,14 @@ export default function AppInfo(props: PropTypes) {
                 </div>
                 {showRatings && (
                     <>
-                        <div className={"vertical-start-flex apps-ratings"}>
+                        <div className={"vertical-start-flex jokes-ratings"}>
                             {app && app?.rank > 0 && (
                                 <ResText14Regular className={"text-store-blue"}>
                                     {`#${app?.rank} in ${app?.primaryGenre}`}
                                 </ResText14Regular>
                             )}
 
-                            <div className={"h-start-flex apps-star-ratings"}>
+                            <div className={"h-start-flex jokes-star-ratings"}>
                                 <FiveStars
                                     rating={app?.meta?.avgRatingText}
                                     style={{ marginTop: 2, marginRight: 8 }}

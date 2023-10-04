@@ -66,14 +66,14 @@ export default function StarRatings(props) {
                 .reverse()
                 .map((item, itemKey) => (
                     <div
-                        key={"apps-rating-" + itemKey}
+                        key={"jokes-rating-" + itemKey}
                         className={"h-end-flex rating-item"}
                     >
                         <span className={"h-end-flex per-rating-stars"}>
                             {[...Array(parseInt(item)).keys()].map(
                                 ratingKey => (
                                     <StarFilled
-                                        key={"apps-rating-ratio-" + ratingKey}
+                                        key={"jokes-rating-ratio-" + ratingKey}
                                     />
                                 ),
                             )}

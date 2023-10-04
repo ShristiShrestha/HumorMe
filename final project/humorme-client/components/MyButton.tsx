@@ -51,7 +51,7 @@ const buttonStyleByType = (
     if (disabled) return webLightGrey;
     switch (btnType) {
         case MyButtonType.primary:
-            return storeBlue;
+            return "#0d3349"; //storeBlue;
         case MyButtonType.warning:
             return isBorder ? orange : lightBanana;
         case MyButtonType.danger:

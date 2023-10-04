@@ -31,7 +31,10 @@ export const getJoke = (id: number) => {
 
 /******************* joke comment ************************/
 
-export const postJokeComment = (jokeId: string, request: string) => {
+export const postJokeComment = (
+    jokeId: string | string[] | undefined,
+    request: string,
+) => {
     return Api.apiCall<UICommentDetails>({
         url: `/jokes/${jokeId}/comments`,
         method: "POST",
@@ -55,9 +58,9 @@ export const postJokeRating = (id: number, label: JokeRatingLevels) => {
         data: label,
     });
 };
-export const getJokeRatings = (id: number) => {
+export const getMyJokeRatings = () => {
     return Api.apiCall<UIRatingDetails[]>({
-        url: `/jokes/${id}/ratings`,
+        url: `/jokes/ratings`,
         method: "GET",
     });
 };

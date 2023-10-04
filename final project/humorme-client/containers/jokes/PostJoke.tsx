@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import MyButton, { MyButtonType } from "../../components/MyButton";
 import { Button, Form, Input, Modal, notification, Select } from "antd";
 import { postJoke } from "../../axios/JokesApi";
 import { useDispatch } from "react-redux";
 import { fetchApps } from "../../redux/apps/actions";
+import { ResText18Regular } from "../../utils/TextUtils";
 
 const defaultJoke = {
     title: "",
@@ -36,12 +36,14 @@ export default function PostJoke() {
 
     return (
         <>
-            <MyButton
-                text={"Post"}
-                btnType={MyButtonType.primary}
-                onClick={() => setModal(true)}
-            />
+            <div className={"h-justified-flex"}>
+                <ResText18Regular>Something funny?</ResText18Regular>
+                <Button type={"primary"} onClick={() => setModal(true)}>
+                    Post
+                </Button>
+            </div>
             <Modal
+                // className={"vertical-start-flex"}
                 open={openModal}
                 onCancel={() => setModal(false)}
                 footer={null}
@@ -50,21 +52,22 @@ export default function PostJoke() {
                     layout={"vertical"}
                     initialValues={defaultJoke}
                     onFinish={submitJoke}
+                    style={{ width: "100%" }}
                 >
+                    {/*<Form.Item*/}
+                    {/*    label={"Title"}*/}
+                    {/*    name="title"*/}
+                    {/*    rules={[*/}
+                    {/*        {*/}
+                    {/*            required: true,*/}
+                    {/*            message: "Please give a short title",*/}
+                    {/*        },*/}
+                    {/*    ]}*/}
+                    {/*>*/}
+                    {/*    <Input placeholder="Short title" />*/}
+                    {/*</Form.Item>*/}
                     <Form.Item
-                        label={"Title"}
-                        name="title"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Please give a short title",
-                            },
-                        ]}
-                    >
-                        <Input placeholder="Short title" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Description"
+                        label="Tell me more"
                         name="text"
                         rules={[
                             {
@@ -78,7 +81,10 @@ export default function PostJoke() {
                             autoSize={{ minRows: 3, maxRows: 5 }}
                         />
                     </Form.Item>
-                    <Form.Item label={"Labels"} name="labels">
+                    <Form.Item
+                        // label={"Labels"}
+                        name="labels"
+                    >
                         <Select
                             mode="tags"
                             placeholder="write and enter labels e.g. #authors"

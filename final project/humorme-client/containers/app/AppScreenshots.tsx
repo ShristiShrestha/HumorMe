@@ -40,7 +40,7 @@ export default function AppScreenshots() {
                     <Image
                         key={"app-screenshot-" + index}
                         src={item}
-                        alt={"apps-screenshots"}
+                        alt={"jokes-screenshots"}
                         width={200}
                         height={360}
                     />

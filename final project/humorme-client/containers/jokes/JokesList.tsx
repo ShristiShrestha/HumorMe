@@ -5,16 +5,9 @@ import { selectApps } from "../../redux/apps/reducer";
 import { Input, List, Spin } from "antd";
 import { ResText14Regular } from "../../utils/TextUtils";
 import { grey3, grey5 } from "../../utils/ShadesUtils";
-import { setAppTimeLog } from "../../redux/events/actions";
-import {
-    PageViewActions,
-    SearchAppsActions,
-} from "../../models/enum/GAEventRateFeatureEnum";
 import { selectAuth } from "../../redux/auth/reducer";
-import { ELEMENT_ON_ACTION } from "../../models/enum/UIRateFeatureEnum";
-import { logAppSearch, logPageView } from "../../models/dto/GAEventLogger";
-import { fetchApps } from "../../redux/apps/actions";
 import JokeCard from "../../components/JokeCard";
+import MyEmptyView from "../../components/MyEmtpyView";
 
 const Wrapper = styled.div.attrs({
     className: "vertical-start-flex",
@@ -63,12 +56,14 @@ const { Item } = List;
 
 export default function JokesList() {
     const dispatch = useDispatch();
-    const { appsById, lastPointer, searchAppsById } = useSelector(selectApps);
+    const { appsById, searchAppsById, myJokesRatingsByIds } =
+        useSelector(selectApps);
     const { user } = useSelector(selectAuth);
     const [showSearchRes, setShowSearchRes] = useState(false);
     const [loadApps, setLoadApps] = useState(false);
 
     /******************* memoized variables ************************/
+
     const searchApps = useMemo(
         () => Object.values(searchAppsById) || [],
         [showSearchRes, Object.keys(searchAppsById)],
@@ -84,32 +79,6 @@ export default function JokesList() {
         [Object.keys(appsById)],
     );
 
-    /******************* GA event logging ************************/
-
-    const logSearchAppQuery = query => {
-        if (query?.toString().length > 0) {
-            let params: any = {
-                element: ELEMENT_ON_ACTION.HOME,
-                query: query,
-                startTs: new Date(),
-                userRole: user?.role,
-            };
-
-            dispatch(
-                // @ts-ignore
-                setAppTimeLog(
-                    SearchAppsActions.QUERY_APP,
-                    "-1",
-                    user?.id || "-1",
-                    params,
-                ),
-            );
-
-            params = { ...params, userId: user?.id, appId: "-1" };
-            logAppSearch(SearchAppsActions.QUERY_APP, params);
-        }
-    };
-
     /******************* event handlers ************************/
     const handleSearch = (e, textCleared: boolean) => {
         const text = e.target.value;
@@ -119,19 +88,7 @@ export default function JokesList() {
         }
 
         if (textCleared) return;
-        // const existingApps = reduxApps;
-        // existingApps.push(...searchApps);
-        // const appsFromLocal = searchByQuery(text, existingApps);
-        //
-        // console.log("search in redux first: ", appsFromLocal);
-        // fuzzy search in existing redux store
-        // if (appsFromLocal && appsFromLocal.length > 0) {
-        //     // @ts-ignore
-        //     dispatch(setApps(appsFromLocal, undefined, true, true));
-        //     setShowSearchRes(true);
-        // }
-        // fetch from server
-        // else {
+
         setLoadApps(true);
         dispatch(
             // @ts-ignore
@@ -140,46 +97,14 @@ export default function JokesList() {
                 setLoadApps(false);
             }),
         );
-        // }
-
-        logSearchAppQuery(text); // GA log event
-    };
-
-    const handleLoadMore = () => {
-        // @ts-ignore
-        dispatch(fetchApps(lastPointer));
-    };
-
-    const logPageNavigate = appId => {
-        if (appId?.toString()?.length > 0) {
-            let params: any = {
-                element: ELEMENT_ON_ACTION.HOME,
-                appId: appId,
-                startTs: new Date(),
-                userRole: user?.role,
-            };
-
-            //TODO: rm logging app page view
-            // dispatch(
-            //     // @ts-ignore
-            //     setAppTimeLog(
-            //         PageViewActions.VIEW_APP_DETAILS,
-            //         appId,
-            //         user?.id || "-1",
-            //         params,
-            //     ),
-            // );
-
-            params = { ...params, userId: user?.id, appId: appId };
-            logPageView(PageViewActions.VIEW_APP_DETAILS, params);
-        }
     };
 
     /******************* render ************************/
 
-    // if (Object.keys(appsById).length < 1) {
-    //     return <MyEmptyView showAsLoading={true} />;
-    // }
+    if (Object.keys(appsById).length < 1) {
+        // eslint-disable-next-line react/jsx-no-undef
+        return <MyEmptyView showAsLoading={true} />;
+    }
 
     return (
         <Wrapper>
@@ -204,27 +129,20 @@ export default function JokesList() {
                         bordered={false}
                         renderItem={(app: any) => (
                             <Item>
-                                <JokeCard joke={app} />
+                                <JokeCard
+                                    joke={app}
+                                    showViewComments={true}
+                                    myRating={
+                                        myJokesRatingsByIds &&
+                                        Object.keys(myJokesRatingsByIds)
+                                            .length > 0
+                                            ? myJokesRatingsByIds[app.id]
+                                            : undefined
+                                    }
+                                />
                             </Item>
                         )}
                     />
-                    {!showSearchRes && (
-                        <LoadMoreDiv
-                            className={"h-centered-flex"}
-                            onClick={() => lastPointer && handleLoadMore()}
-                        >
-                            <ResText14Regular
-                                className={
-                                    "text-grey2 " +
-                                    (lastPointer ? "" : "disabled-cursor")
-                                }
-                            >
-                                {lastPointer
-                                    ? "Load more apps"
-                                    : "End of the page"}
-                            </ResText14Regular>
-                        </LoadMoreDiv>
-                    )}
                 </Spin>
             </ListContent>
         </Wrapper>

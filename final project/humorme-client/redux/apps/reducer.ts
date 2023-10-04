@@ -4,14 +4,15 @@ import {
     SET_APP_RATE_FEATURES,
     SET_APP_REVIEWS,
     SET_APPS,
+    SET_MY_JOKE_RATINGS,
     SET_SEARCH_APPS,
 } from "./types";
 import { RootState } from "../common/types";
-import { ALL_JOKES } from "../../data/jokes";
 
 const initialState: AppsState = {
     appsById: {}, //ALL_JOKES,
     searchAppsById: {},
+    myJokesRatingsByIds: {},
     appReviews: [],
 };
 
@@ -22,7 +23,6 @@ export default function reducer(state = initialState, action: any): AppsState {
             return {
                 ...state,
                 appsById: action.payload.appsById,
-                lastPointer: action.payload.lastPointer,
             };
         }
         case SET_SEARCH_APPS: {
@@ -35,6 +35,12 @@ export default function reducer(state = initialState, action: any): AppsState {
             return {
                 ...state,
                 app: action.payload,
+            };
+        }
+        case SET_MY_JOKE_RATINGS: {
+            return {
+                ...state,
+                myJokesRatingsByIds: action.payload.myJokesRatingsByIds,
             };
         }
         case SET_APP_RATE_FEATURES: {

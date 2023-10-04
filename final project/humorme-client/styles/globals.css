@@ -44,7 +44,7 @@ div *::-webkit-scrollbar-thumb {
 }
 
 /* ============================================= */
-/* Global apps css */
+/* Global jokes css */
 /* ============================================= */
 
 .App {
@@ -197,6 +197,7 @@ h6 {
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
+    width: 100%;
 }
 
 .no-flex-wrap {
@@ -372,9 +373,10 @@ h6 {
 }
 
 
-.text-italic{
+.text-italic {
     font-style: italic !important;
 }
+
 .wrap-word {
     white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
     hyphens: auto; /* Mozilla */
@@ -537,9 +539,8 @@ a:not([href]):not([class]) {
 /* ============================================= */
 
 
-
 .ant-form-item {
-    min-height: 60px;
+    /*min-height: 60px;*/
     margin-bottom: 16px;
 }
 
@@ -848,7 +849,7 @@ input[id^="search"]::placeholder {
 }
 
 .inverse-jelly-inner-shadow {
-    box-shadow: 7px 7px 40px rgba(0,0,0,.21);
+    box-shadow: 7px 7px 40px rgba(0, 0, 0, .21);
 }
 
 .outer-shadow {
@@ -1022,4 +1023,20 @@ input[id^="search"]::placeholder {
     text-decoration: underline;
 }
 
+/* antd buttons */
+.ant-btn, .ant-btn-primary {
+    background: #0d3349;
+}
+
+.ant-btn:hover, .ant-btn-primary:hover {
+    background: white !important;
+    border: 1px solid black !important;
+    color: black !important;
+}
+
+.ant-btn:focus, .ant-btn-primary:focus {
+    background: white !important;
+    border: 1px solid black !important;
+    color: black !important;
+}
 

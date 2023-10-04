@@ -12,11 +12,11 @@ export type UIJokeDetails = {
     title: string;
     text: string;
     labels: string;
-    labelRatings: UIJokeRatings;
+    labelRatings: LabelRatings;
     user: UIUserDetails;
     createdAt: Date;
 };
 
-export type UIJokeRatings = {
+export type LabelRatings = {
     [level in JokeRatingLevels]: number;
 };
