@@ -1,5 +1,6 @@
 package com.fours.humorme.controller;
 
+import com.fours.humorme.dto.comment.CommentDto;
 import com.fours.humorme.exception.NotFoundException;
 import com.fours.humorme.model.Comment;
 import com.fours.humorme.model.Joke;
@@ -30,10 +31,10 @@ public class CommentController {
     @Autowired private CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<?> post(@PathVariable Long jokeId, @RequestBody String text) throws NotFoundException {
+    public ResponseEntity<?> post(@PathVariable Long jokeId, @RequestBody CommentDto commentDto) throws NotFoundException {
         User user = userService.findByName(authUserService.getUsername());
         Joke joke = jokeService.findById(jokeId);
-        Comment comment = commentService.create(joke, text, user);
+        Comment comment = commentService.create(joke, commentDto.getText(), user);
         return new ResponseEntity<>(comment, HttpStatus.OK);
     }
 

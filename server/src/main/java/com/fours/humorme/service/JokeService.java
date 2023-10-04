@@ -2,7 +2,7 @@ package com.fours.humorme.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fours.humorme.dto.JokeDto;
+import com.fours.humorme.dto.joke.JokeDto;
 import com.fours.humorme.exception.NotAuthorizedException;
 import com.fours.humorme.exception.NotFoundException;
 import com.fours.humorme.model.Joke;
@@ -34,16 +34,11 @@ public class JokeService {
 
     public Rate rate(Joke joke, User user, String label) throws JsonProcessingException {
 
-        List<Rate> existingUserJokeRating = rateRepo.findAllByUser_Id_AndJoke_Id(user.getId(), joke.getId());
+        Optional<Rate> existingUserJokeRating = rateRepo.findAllByUser_Id_AndJoke_Id(user.getId(), joke.getId());
         Rate rate;
 
-        if(existingUserJokeRating.isEmpty()){
-            rate = new Rate(joke, user, label);
-        }else{
-            rate = existingUserJokeRating.get(existingUserJokeRating.size() - 1);
-
-        }
-
+        rate = existingUserJokeRating.orElseGet(() -> new Rate(joke, user, label));
+        rate.setLabel(label);
         rate = rateRepo.save(rate);
         Joke updatedJoke = recalculateRates(joke);
         rate.setJoke(updatedJoke);

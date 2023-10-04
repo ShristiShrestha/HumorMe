@@ -1,4 +1,4 @@
-package com.fours.humorme.model;
+package com.fours.humorme.dto.jwt;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

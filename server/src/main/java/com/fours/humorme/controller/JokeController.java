@@ -1,7 +1,7 @@
 package com.fours.humorme.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fours.humorme.dto.JokeDto;
+import com.fours.humorme.dto.joke.JokeDto;
 import com.fours.humorme.exception.NotAuthorizedException;
 import com.fours.humorme.exception.NotFoundException;
 import com.fours.humorme.model.Joke;

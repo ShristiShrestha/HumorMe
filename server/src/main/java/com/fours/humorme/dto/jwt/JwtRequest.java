@@ -1,16 +1,18 @@
-package com.fours.humorme.dto;
+package com.fours.humorme.dto.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostUserDto {
-    private String name;
+@Setter
+@Getter
+public class JwtRequest implements Serializable {
+
     private String email;
     private String password;
 }

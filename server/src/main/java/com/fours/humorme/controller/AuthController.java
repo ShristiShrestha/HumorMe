@@ -3,8 +3,8 @@ package com.fours.humorme.controller;
 import com.fours.humorme.auth.AuthService;
 import com.fours.humorme.auth.JwtUserDetailService;
 import com.fours.humorme.constants.AuthConstants;
-import com.fours.humorme.dto.UserDto;
-import com.fours.humorme.model.JwtRequest;
+import com.fours.humorme.dto.user.UserDto;
+import com.fours.humorme.dto.jwt.JwtRequest;
 import com.fours.humorme.model.User;
 import com.fours.humorme.service.AuthenticatedUserService;
 import com.fours.humorme.service.CookieService;
@@ -50,7 +50,7 @@ public class AuthController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<?> getProfile() {
+    public ResponseEntity<UserDto> getProfile() {
         final String userName = authenticatedUserService.getUsername();
 
         final User userDetails = userDetailsService
@@ -62,21 +62,12 @@ public class AuthController {
         );
     }
 
-    @GetMapping(value = "/logout")
+    @PostMapping(value = "/logout")
     public ResponseEntity<?> logout() {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE,
                         CookieService.getResponseCookie("", 0).toString())
                 .build();
-    }
-
-    @GetMapping(value = "/check")
-    public ResponseEntity<?> checkAuthentication() {
-        String username = authenticatedUserService.getUsername();
-
-        List<String> authorities = authenticatedUserService.getAuthorities();
-
-        return ResponseEntity.ok("Authentication works!");
     }
 }

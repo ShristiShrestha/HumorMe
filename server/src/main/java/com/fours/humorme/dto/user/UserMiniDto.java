@@ -1,7 +1,6 @@
-package com.fours.humorme.dto;
+package com.fours.humorme.dto.user;
 
 import com.fours.humorme.model.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,8 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDto {
-
+public class UserMiniDto {
     private Long id;
 
     private String name;
@@ -21,12 +19,10 @@ public class UserDto {
 
     private Date createdAt;
 
-    public UserDto(User user) {
+    UserMiniDto(User user) {
         this.id = user.getId();
-        this.email = user.getEmail();
         this.name = user.getName();
+        this.email = user.getEmail();
         this.createdAt = user.getCreatedAt();
     }
 }
-
-

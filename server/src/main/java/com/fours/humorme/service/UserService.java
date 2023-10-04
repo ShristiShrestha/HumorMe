@@ -1,22 +1,20 @@
 package com.fours.humorme.service;
 
 import com.fours.humorme.constants.ResponseMessage;
-import com.fours.humorme.dto.PostUserDto;
-import com.fours.humorme.dto.UserDto;
+import com.fours.humorme.dto.user.PostUserDto;
+import com.fours.humorme.dto.user.UserDto;
+import com.fours.humorme.dto.user.UserMiniDto;
 import com.fours.humorme.exception.BadRequestException;
 import com.fours.humorme.exception.NotFoundException;
 import com.fours.humorme.model.User;
 import com.fours.humorme.repository.UserRepository;
-import com.fours.humorme.utils.FilterSortUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -31,7 +29,7 @@ public class UserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public UserDto save(PostUserDto request) throws BadRequestException {
+    public User save(PostUserDto request) throws BadRequestException {
 
         Optional<User> savedUser = userRepository.findByEmail(request.getEmail());
 
@@ -41,71 +39,39 @@ public class UserService {
             User user = new User(request.getName(), request.getEmail(), request.getPassword());
             user.setIsEnabled(true);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
-            return new UserDto(user);
+            return userRepository.save(user);
+
         }
     }
 
-    public UserDto update(UserDto user) {
-        Long id = user.getId();
-
-        Optional<User> userOptional = userRepository.findById(id);
-
-        if (userOptional.isEmpty()) {
-            throw new EntityNotFoundException("User with provided id doesn't exist.");
-        } else {
-            User userToUpdate = userOptional.get();
-
-            User updatedUser = userRepository.save(userToUpdate);
-
-            return new UserDto(updatedUser);
-        }
+    public User update(User loggedUser, UserMiniDto user) {
+        loggedUser.setName(user.getName());
+        return userRepository.save(loggedUser);
     }
 
-    public void delete(long id) {
-        userRepository.updateIsEnabled(id, false);
+    public User patchFollowing(User loggedUser, User toFollow){
+        // who am I following
+        Set<User> loggedUserFollowings = loggedUser.getFollowings();
+        // add one more following
+        loggedUserFollowings.add(toFollow);
+        loggedUser.setFollowings(loggedUserFollowings);
+
+        // followers of who am I following
+        Set<User> toFollowFollowers = toFollow.getFollowers();
+        // add one more (me) to the list of followers of whom I am following
+        toFollowFollowers.add(loggedUser);
+        toFollow.setFollowers(toFollowFollowers);
+
+        userRepository.save(toFollow);
+        return userRepository.save(loggedUser);
     }
 
-    public List<UserDto> findAll(
-            Optional<String> sortBy,
-            Optional<String> filterKey,
-            Optional<String> filterValue
-    ) {
-        List<UserDto> userDto = new ArrayList<>();
-        List<User> users = (List<User>) userRepository.findAll();
 
-        if (!users.isEmpty()) {
-            //Filter by role; either tutor, student or coordinator
-
-            //Convert to dto
-            userDto.addAll(
-                    users.stream()
-                            .map(UserDto::new)
-                            .collect(Collectors.toList())
-            );
-
-            //Filter based on filter key and value
-            if (filterKey.isPresent() && filterValue.isPresent()) {
-                String fKey = filterKey.get();
-                String fValue = filterValue.get();
-
-                userDto = FilterSortUtil.filterUsers(fKey, fValue, userDto);
-            }
-
-            if (sortBy.isPresent())
-                FilterSortUtil.sortUsers(sortBy.get(), userDto);
-        }
-
-        return userDto;
-    }
-
-    public UserDto findById(Long id) throws BadRequestException {
-        User user = userRepository
+    public User findById(Long id) throws BadRequestException {
+        return userRepository
                 .findById(id)
                 .orElseThrow(() -> new BadRequestException(ResponseMessage.NON_EXISTENT_USER));
-        return new UserDto(user);
     }
-
 
     public User findByName(String name) throws NotFoundException {
         Optional<User> user = userRepository.findByEmailOrName(name, name);

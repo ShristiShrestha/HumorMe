@@ -1,4 +1,4 @@
-package com.fours.humorme.dto;
+package com.fours.humorme.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class JokeDto {
-    private String title;
-    private String text;
-    private String labels;
+public class PostUserDto {
+    private String name;
+    private String email;
+    private String password;
 }
-

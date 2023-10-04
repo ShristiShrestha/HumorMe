@@ -93,8 +93,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .antMatchers(HttpMethod.GET, "/**").permitAll() // allow view for public
             .antMatchers("/auth/login").permitAll()
-            .antMatchers("/user/signup").permitAll()
             .antMatchers("/auth/profile").permitAll()
+            .antMatchers("/users/signup").permitAll()
             .anyRequest().authenticated()
             .and()
 //            .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
