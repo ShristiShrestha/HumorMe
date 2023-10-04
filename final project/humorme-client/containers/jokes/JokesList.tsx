@@ -101,10 +101,10 @@ export default function JokesList() {
 
     /******************* render ************************/
 
-    if (Object.keys(appsById).length < 1) {
-        // eslint-disable-next-line react/jsx-no-undef
-        return <MyEmptyView showAsLoading={true} />;
-    }
+    // if (Object.keys(appsById).length < 1) {
+    //     // eslint-disable-next-line react/jsx-no-undef
+    //     return <MyEmptyView showAsLoading={true} />;
+    // }
 
     return (
         <Wrapper>

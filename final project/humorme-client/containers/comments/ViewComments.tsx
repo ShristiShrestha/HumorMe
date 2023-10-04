@@ -16,6 +16,9 @@ import { ResText16SemiBold } from "../../utils/TextUtils";
 
 const Wrapper = styled.div`
     width: 100%;
+    .view-comments {
+        row-gap: 16px;
+    }
 `;
 
 const { TextArea } = Input;
@@ -28,7 +31,9 @@ export default function ViewComments() {
 
     /******************* handlers ************************/
     const submitComment = data => {
-        postJokeComment(id, data.text)
+        postJokeComment(id, {
+            text: data.text,
+        })
             .then((res: UICommentDetails) => {
                 openNotification(
                     "Comment submitted",
@@ -80,14 +85,16 @@ export default function ViewComments() {
                     </Form.Item>
                 </Form>
             </div>
-            <div className={"vertical-start-flex"}>
+            <div className={"vertical-start-flex view-comments"}>
                 <ResText16SemiBold>All comments</ResText16SemiBold>
-                {appReviews?.map(comment => (
-                    <CommentCard
-                        key={"joke-" + id + comment.id}
-                        comment={comment}
-                    />
-                ))}
+                <div className={"vertical-start-flex"}>
+                    {appReviews?.map(comment => (
+                        <CommentCard
+                            key={"joke-" + id + comment.id}
+                            comment={comment}
+                        />
+                    ))}
+                </div>
             </div>
         </Wrapper>
     );

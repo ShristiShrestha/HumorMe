@@ -33,7 +33,7 @@ export const getJoke = (id: number) => {
 
 export const postJokeComment = (
     jokeId: string | string[] | undefined,
-    request: string,
+    request: any,
 ) => {
     return Api.apiCall<UICommentDetails>({
         url: `/jokes/${jokeId}/comments`,

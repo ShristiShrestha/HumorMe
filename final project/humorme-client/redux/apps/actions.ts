@@ -48,8 +48,15 @@ export function setMyJokeRatings(myRatings: UIRatingDetails[]) {
 }
 
 export function setApp(app: UIJokeDetails) {
+    let existingApps = myStore.getState()?.apps?.appsById || {};
+    existingApps[app.id] = app;
     return (dispatch: MyThunkDispatch) => {
-        dispatch({ type: SET_APP, payload: app });
+        dispatch({
+            type: SET_APPS,
+            payload: {
+                appsById: existingApps,
+            },
+        });
     };
 }
 

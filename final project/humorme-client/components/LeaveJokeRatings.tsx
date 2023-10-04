@@ -5,7 +5,7 @@ import { ResText14Regular } from "../utils/TextUtils";
 import { grey2, grey6, pearl } from "../utils/ShadesUtils";
 import { postJokeRating } from "../axios/JokesApi";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMyJokeRatings } from "../redux/apps/actions";
+import { fetchMyJokeRatings, setApp } from "../redux/apps/actions";
 import Link from "next/link";
 import { selectAuth } from "../redux/auth/reducer";
 import { selectApps } from "../redux/apps/reducer";
@@ -59,9 +59,9 @@ export default function LeaveJokeRatings(props: Props) {
         e.preventDefault();
         e.stopPropagation();
 
-        postJokeRating(id, label).then(joke => {
+        postJokeRating(id, label).then((rating: UIRatingDetails) => {
             // @ts-ignore
-            // dispatch(setApp(joke));
+            dispatch(setApp(rating.joke));
             // @ts-ignore
             dispatch(fetchMyJokeRatings());
         });

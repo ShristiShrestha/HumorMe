@@ -17,7 +17,8 @@ const Wrapper = styled.div`
     :hover {
         border: 1px solid ${grey5};
         border-radius: 4px;
-        box-shadow: 16px 6px 4px ${grey5};
+        background: #fcfcfc;
+        // box-shadow: 16px 6px 4px ${grey5};
     }
 
     @media (max-width: 540px) {
