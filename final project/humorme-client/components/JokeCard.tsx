@@ -11,6 +11,7 @@ import LeaveJokeRatings from "./LeaveJokeRatings";
 import { UIRatingDetails } from "../models/dto/CommentDto";
 import Image from "next/image";
 import { toMonthDateStr } from "../utils/DateUtils";
+import Link from "next/link";
 
 const Wrapper = styled.div`
     width: 100%;
@@ -81,9 +82,11 @@ export default function JokeCard(props: Props) {
                         width={20}
                         height={20}
                     />
-                    <ResText14Regular className={"text-grey3"}>
-                        {joke.user.name}
-                    </ResText14Regular>
+                    <Link href={`/users/${joke.user.id}`}>
+                        <ResText14Regular className={"text-grey3"}>
+                            {joke.user.name}
+                        </ResText14Regular>
+                    </Link>
                 </span>
                 <ResText14Regular className={"text-grey2 text-italic"}>
                     {toMonthDateStr(new Date(joke.createdAt))}

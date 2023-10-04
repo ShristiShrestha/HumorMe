@@ -7,7 +7,7 @@ import {
 
 export const signup = (request: PostUserDto) => {
     return Api.apiCall<UIUserDetails>({
-        url: "/user/signup",
+        url: "/users/signup",
         method: "POST",
         data: request,
     });
@@ -28,10 +28,9 @@ export const checkLogin = () => {
     });
 };
 
-export const postUserAssignToGroup = (reqData: any) => {
+export const getUser = (id: number) => {
     return Api.apiCall({
-        url: "/apiPostAssignUserToGroup",
-        method: "POST",
-        data: reqData,
+        url: `/users/${id}`,
+        method: "GET",
     });
 };

@@ -4,6 +4,9 @@ export type UIUserDetails = {
     email: string;
     isEnabled: boolean;
     createdAt: Date;
+
+    followers: UIUserDetails[];
+    following: UIUserDetails[];
 };
 
 export type PostUserDto = {
