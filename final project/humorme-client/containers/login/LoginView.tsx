@@ -16,8 +16,10 @@ import { login, signup } from "../../axios/UsersApi";
 import { setAuth } from "../../redux/auth/actions";
 import { selectAuth } from "../../redux/auth/reducer";
 import _ from "lodash";
+import { UserOutlined } from "@ant-design/icons";
 
 const Wrapper = styled.div`
+    column-gap: 12px;
     .auth-options {
         row-gap: 12px;
         column-gap: 12px;
@@ -77,8 +79,7 @@ export default function LoginView() {
         defaultTab: "1",
     });
     const [openLogoutModal, setOpenLogoutModal] = useState(false);
-    const { loggedIn } = useSelector(selectAuth);
-    const [userIsLoggedIn, setUserLogged] = useState(false);
+    const { loggedIn, user } = useSelector(selectAuth);
 
     /******************* event handler ************************/
 
@@ -275,7 +276,14 @@ export default function LoginView() {
 
     // @ts-ignore
     return (
-        <Wrapper>
+        <Wrapper className={"h-start-flex"}>
+            {loggedIn && user?.id && (
+                <ResText16Regular>
+                    {" "}
+                    <UserOutlined style={{ marginRight: 6 }} />
+                    {user?.name}
+                </ResText16Regular>
+            )}
             {loggedIn ? (
                 <MyButton
                     text={"Sign out"}

@@ -21,7 +21,7 @@ export default function Home() {
     return (
         <Wrapper>
             {loggedIn && <PostJoke />}
-            <JokesList />
+            <JokesList showSearch={true} />
         </Wrapper>
     );
 }

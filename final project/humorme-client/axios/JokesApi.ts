@@ -1,5 +1,5 @@
 import Api from "../utils/ApiUtils";
-import { PostJoke, UIJokeDetails } from "../models/dto/JokeDto";
+import { JokeQuery, PostJoke, UIJokeDetails } from "../models/dto/JokeDto";
 import { UICommentDetails, UIRatingDetails } from "../models/dto/CommentDto";
 import { JokeRatingLevels } from "../models/enum/JokeEnum";
 
@@ -12,13 +12,11 @@ export const postJoke = (request: PostJoke) => {
         data: request,
     });
 };
-export const getJokes = (labels?: string) => {
+export const getJokes = (query?: JokeQuery) => {
     return Api.apiCall<UIJokeDetails[]>({
         url: "/jokes",
         method: "GET",
-        params: {
-            labels: labels,
-        },
+        params: { ...query },
     });
 };
 

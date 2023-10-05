@@ -2,12 +2,21 @@ import React from "react";
 import { ResText14Regular, ResText16Regular } from "../utils/TextUtils";
 import Image from "next/image";
 import styled from "styled-components";
-import { grey5, grey6 } from "../utils/ShadesUtils";
+import {
+    crimson,
+    grey5,
+    grey6,
+    lightBanana,
+    lightRed,
+    pearl,
+} from "../utils/ShadesUtils";
+import { Divider, Tag } from "antd";
+import { toMonthDateStr } from "../utils/DateUtils";
+import { MeTag } from "./MeTag";
 
 const Wrapper = styled.div`
-    row-gap: 8px;
-    padding: 24px;
-    border: 1px solid white;
+    row-gap: 24px;
+    padding: 28px 24px;
     border-bottom: 1px solid ${grey6};
 
     .comment-title {
@@ -15,10 +24,8 @@ const Wrapper = styled.div`
     }
 
     :hover {
-        border: 1px solid ${grey5};
         border-radius: 4px;
         background: #fcfcfc;
-        // box-shadow: 16px 6px 4px ${grey5};
     }
 
     @media (max-width: 540px) {
@@ -28,8 +35,8 @@ const Wrapper = styled.div`
     }
 `;
 
-export default function CommentCard({ comment }) {
-    const { text, user } = comment;
+export default function CommentCard({ comment, loggedUser }) {
+    const { text, user, createdAt } = comment;
 
     return (
         <Wrapper className={"vertical-start-flex"}>
@@ -42,11 +49,14 @@ export default function CommentCard({ comment }) {
                 />
                 <ResText14Regular className={"text-grey1"}>
                     {user?.name}
+                    {user?.id === loggedUser?.id && <MeTag />}
+                </ResText14Regular>
+                <Divider type={"vertical"} />
+                <ResText14Regular className={"text-grey3"}>
+                    {toMonthDateStr(new Date(createdAt))}
                 </ResText14Regular>
             </div>
-            <ResText16Regular className={"text-grey2"}>
-                {comment.text}
-            </ResText16Regular>
+            <ResText16Regular className={"text-grey2"}>{text}</ResText16Regular>
         </Wrapper>
     );
 }

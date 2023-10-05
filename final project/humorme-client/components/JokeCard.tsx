@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { UIJokeDetails } from "../models/dto/JokeDto";
 import styled from "styled-components";
-import { grey1, grey5, grey6 } from "../utils/ShadesUtils";
+import { grey1, grey2, grey3, grey5, grey6 } from "../utils/ShadesUtils";
 import {
     ResText14Regular,
     ResText16Regular,
@@ -12,6 +12,13 @@ import { UIRatingDetails } from "../models/dto/CommentDto";
 import Image from "next/image";
 import { toMonthDateStr } from "../utils/DateUtils";
 import Link from "next/link";
+import { sum } from "lodash";
+import { Divider, Tag } from "antd";
+import {
+    CommentOutlined,
+    LikeOutlined,
+    SmileOutlined,
+} from "@ant-design/icons";
 
 const Wrapper = styled.div`
     width: 100%;
@@ -29,14 +36,14 @@ const Wrapper = styled.div`
 
     .joke-content {
         justify-content: start;
-        row-gap: 16px;
+        row-gap: 8px;
         text-align: justify;
         column-gap: 12px;
     }
 
     .joke-ratings {
         column-gap: 16px;
-        row-gap: 20px;
+        row-gap: 28px;
         width: 100%;
     }
 
@@ -45,6 +52,10 @@ const Wrapper = styled.div`
         border-radius: 4px;
         background: #fcfcfc;
         // box-shadow: 16px 6px 4px ${grey5};
+
+        .view-comments-link {
+            background: white;
+        }
     }
 
     @media (max-width: 540px) {
@@ -62,6 +73,20 @@ type Props = {
 export default function JokeCard(props: Props) {
     const { joke, myRating, showViewComments } = props;
 
+    const labels = useMemo(
+        () => (joke && joke.labels ? joke.labels.split(",") : []),
+        [joke.id],
+    );
+
+    const totalRating = useMemo(
+        () =>
+            sum(
+                joke && joke.labelRatings
+                    ? Object.values(joke.labelRatings)
+                    : [],
+            ),
+        [joke?.id],
+    );
     const maxRating = useMemo(
         () =>
             joke && joke.labelRatings
@@ -73,42 +98,115 @@ export default function JokeCard(props: Props) {
     );
 
     return (
-        <Wrapper className={"vertical-start-flex"}>
-            <div className={"h-justified-flex joke-title"}>
-                <span className={"h-start-flex joke-title-user"}>
-                    <Image
-                        src={"/default_user.png"}
-                        alt={"default user"}
-                        width={20}
-                        height={20}
+        <Link href={`/jokes/${joke?.id}`} className={"full-width"}>
+            <Wrapper className={"vertical-start-flex"}>
+                <div className={"h-justified-flex joke-title"}>
+                    <span className={"h-start-flex joke-title-user"}>
+                        <Image
+                            src={"/default_user.png"}
+                            alt={"default user"}
+                            width={20}
+                            height={20}
+                        />
+                        <Link href={`/users/${joke.user.id}`}>
+                            <ResText14Regular className={"text-grey3"}>
+                                {joke.user.name}
+                            </ResText14Regular>
+                        </Link>
+                    </span>
+                    <ResText14Regular className={"text-grey2 text-italic"}>
+                        {toMonthDateStr(new Date(joke.createdAt))}
+                    </ResText14Regular>
+                </div>
+                <div className={"vertical-start-flex joke-content"}>
+                    <ResText24SemiBold>{joke.text}</ResText24SemiBold>
+                    {/*<ResText18Regular>{joke.text}</ResText18Regular>*/}
+                </div>
+                <div className={"vertical-start-flex joke-ratings"}>
+                    {(totalRating > 0 ||
+                        (joke?.totalComments && joke?.totalComments > 0)) && (
+                        <span>
+                            {/* total ratings */}
+                            {totalRating > 0 && (
+                                <>
+                                    <ResText16Regular>
+                                        <SmileOutlined
+                                            style={{
+                                                marginRight: 6,
+                                                color: grey3,
+                                            }}
+                                        />
+                                        {totalRating}
+                                    </ResText16Regular>{" "}
+                                    <Divider type={"vertical"} />
+                                </>
+                            )}
+
+                            {/* total text comments */}
+                            {joke?.totalComments && joke?.totalComments > 0 && (
+                                <>
+                                    <ResText16Regular>
+                                        <CommentOutlined
+                                            style={{
+                                                marginRight: 6,
+                                                color: grey3,
+                                            }}
+                                        />
+                                        {joke.totalComments}
+                                    </ResText16Regular>
+                                    <Divider type={"vertical"} />
+                                </>
+                            )}
+
+                            {/* max people rating */}
+                            {maxRating &&
+                                maxRating?.length > 1 &&
+                                totalRating > 0 && (
+                                    <>
+                                        <ResText16Regular
+                                            className={"text-grey2"}
+                                        >
+                                            {100 * (maxRating[1] / totalRating)}
+                                            % found this{" "}
+                                            {maxRating[0]
+                                                ?.replace("=", "")
+                                                ?.toLowerCase()}
+                                        </ResText16Regular>
+                                        <Divider type={"vertical"} />
+                                    </>
+                                )}
+
+                            {/* your rating */}
+                            {myRating && (
+                                <ResText14Regular className={"text-grey3"}>
+                                    You found this{" "}
+                                    <i className={"text-grey2"}>
+                                        {myRating?.label
+                                            ?.toLowerCase()
+                                            ?.replace("=", "")}
+                                    </i>
+                                </ResText14Regular>
+                            )}
+                        </span>
+                    )}
+
+                    {labels.length > 0 && (
+                        <div className={"h-start-flex"}>
+                            {labels.map(item => (
+                                <Tag key={"joke-" + item}>
+                                    {item.toLowerCase()}
+                                </Tag>
+                            ))}
+                        </div>
+                    )}
+
+                    <LeaveJokeRatings
+                        joke={joke}
+                        myRating={myRating}
+                        showViewComments={showViewComments}
                     />
-                    <Link href={`/users/${joke.user.id}`}>
-                        <ResText14Regular className={"text-grey3"}>
-                            {joke.user.name}
-                        </ResText14Regular>
-                    </Link>
-                </span>
-                <ResText14Regular className={"text-grey2 text-italic"}>
-                    {toMonthDateStr(new Date(joke.createdAt))}
-                </ResText14Regular>
-            </div>
-            <div className={"vertical-start-flex joke-content"}>
-                <ResText24SemiBold>{joke.text}</ResText24SemiBold>
-                {/*<ResText18Regular>{joke.text}</ResText18Regular>*/}
-            </div>
-            <div className={"vertical-start-flex joke-ratings"}>
-                {maxRating && maxRating?.length > 1 && (
-                    <ResText16Regular className={"text-grey2 text-italic"}>
-                        {maxRating[1]} people found this{" "}
-                        {maxRating[0]?.replace("=", "")?.toLowerCase()}
-                    </ResText16Regular>
-                )}
-                <LeaveJokeRatings
-                    joke={joke}
-                    myRating={myRating}
-                    showViewComments={showViewComments}
-                />
-            </div>
-        </Wrapper>
+                </div>
+            </Wrapper>
+        </Link>
     );
 }

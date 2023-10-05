@@ -9,19 +9,23 @@ import Image from "next/image";
 import {
     ResText14Regular,
     ResText16Regular,
+    ResText18Regular,
     ResText18SemiBold,
 } from "../../../utils/TextUtils";
 import { toMonthDateYearStr } from "../../../utils/DateUtils";
 import { Button, Divider, Form, Input, Modal } from "antd";
 import MyButton, { MyButtonType } from "../../../components/MyButton";
 import { patchUser } from "../../../axios/UsersApi";
+import JokesList from "../../../containers/jokes/JokesList";
+
+const { TextArea } = Input;
 
 const Wrapper = styled.div`
     height: calc(100vh - 110px);
     position: relative;
     overflow-y: auto;
-    row-gap: 16px;
     padding-bottom: 24px;
+    row-gap: 32px;
 
     .user-profile {
         row-gap: 16px;
@@ -34,6 +38,8 @@ const Wrapper = styled.div`
     }
 
     .user-jokes {
+        margin-top: 24px;
+        row-gap: 24px;
     }
 `;
 
@@ -66,6 +72,14 @@ export default function UserProfile() {
         }
     }, [id]);
 
+    // useEffect(() => {
+    //     const params = {
+    //         userId: viewUser?.id,
+    //     };
+    //     // @ts-ignore
+    //     dispatch(fetchApps(params, true));
+    // }, [viewUser?.id]);
+
     /******************* handlers ************************/
 
     const handleFollow = () => {};
@@ -87,7 +101,8 @@ export default function UserProfile() {
 
     return (
         <>
-            <Wrapper>
+            <Wrapper className={"vertical-start-flex"}>
+                {/* view user profile */}
                 <div className={"centered-flex user-profile"}>
                     <Image
                         src={"/default_user.png"}
@@ -133,7 +148,14 @@ export default function UserProfile() {
                         />
                     )}
                 </div>
-                <div className={"vertical-start-flex"}></div>
+
+                {/* view user jokes */}
+                <div className={"vertical-start-flex user-jokes"}>
+                    <ResText18Regular className={"text-grey2"}>
+                        {viewUser?.name + "'s jokes"}
+                    </ResText18Regular>
+                    <JokesList showSearch={false} />
+                </div>
             </Wrapper>
             <Modal
                 open={updateOpen}
@@ -165,9 +187,21 @@ export default function UserProfile() {
                         >
                             <Input placeholder="Your name" />
                         </Form.Item>
+
+                        <Form.Item
+                            label="Bio"
+                            name="bio"
+                            rules={[
+                                {
+                                    required: false,
+                                },
+                            ]}
+                        >
+                            <TextArea rows={5} placeholder="Your bio" />
+                        </Form.Item>
                         <Form.Item className={"h-end-flex"}>
                             <Button htmlType={"submit"} type="primary">
-                                Post
+                                Save
                             </Button>
                         </Form.Item>
                     </Form>

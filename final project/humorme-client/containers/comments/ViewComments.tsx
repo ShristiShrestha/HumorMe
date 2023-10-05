@@ -11,7 +11,7 @@ import { UICommentDetails } from "../../models/dto/CommentDto";
 import { openNotification } from "../../utils/NotificationUtils";
 import { NotificationEnum } from "../../models/enum/NotificationEnum";
 import _ from "lodash";
-import { fetchAppReviews } from "../../redux/apps/actions";
+import { fetchApp, fetchAppReviews } from "../../redux/apps/actions";
 import { ResText16SemiBold } from "../../utils/TextUtils";
 
 const Wrapper = styled.div`
@@ -31,11 +31,11 @@ export default function ViewComments() {
     const dispatch = useDispatch();
     const { id } = router.query;
     const { loggedIn, user } = useSelector(selectAuth);
-    const { app, appReviews } = useSelector(selectApps);
+    const { appReviews } = useSelector(selectApps);
 
     /******************* handlers ************************/
     const submitComment = data => {
-        if (data.text?.length() < 1) {
+        if (data.text?.length < 1) {
             return openNotification(
                 "Empty comments",
                 "Say something or not.",
@@ -54,6 +54,8 @@ export default function ViewComments() {
                 );
                 // @ts-ignore
                 dispatch(fetchAppReviews(id));
+                // @ts-ignore
+                dispatch(fetchApp(id));
             })
             .catch(err => {
                 openNotification(
@@ -106,6 +108,7 @@ export default function ViewComments() {
                         <CommentCard
                             key={"joke-" + id + comment.id}
                             comment={comment}
+                            loggedUser={user}
                         />
                     ))}
                 </div>

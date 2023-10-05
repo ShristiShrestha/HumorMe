@@ -2,7 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import { JokeRatingLevels } from "../models/enum/JokeEnum";
 import { ResText14Regular } from "../utils/TextUtils";
-import { grey2, grey6, pearl } from "../utils/ShadesUtils";
+import {
+    amethyst,
+    grey2,
+    grey3,
+    grey6,
+    pearl,
+    snow,
+} from "../utils/ShadesUtils";
 import { postJokeRating } from "../axios/JokesApi";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMyJokeRatings, setApp } from "../redux/apps/actions";
@@ -26,6 +33,18 @@ const Wrapper = styled.div`
         color: white;
         cursor: pointer;
     }
+
+    .view-comments-link {
+        padding: 6px 12px;
+        color: ${grey3};
+        border: 1px solid white;
+
+        :hover {
+            border-radius: 4px;
+            border: 1px solid ${grey3};
+            color: ${grey2} !important;
+        }
+    }
 `;
 
 const ClickItem = styled.div`
@@ -33,6 +52,7 @@ const ClickItem = styled.div`
     color: ${grey2};
     border: 1px solid ${grey6};
     background: ${pearl};
+    border-radius: 4px;
 
     :hover {
         background: ${grey2};
@@ -91,13 +111,12 @@ export default function LeaveJokeRatings(props: Props) {
                     </ClickItem>
                 ))}
             </div>
-            {showViewComments && (
-                <Link href={`/jokes/${id}`}>
-                    <ResText14Regular className={"text-grey3"}>
-                        view comments
-                    </ResText14Regular>
-                </Link>
-            )}
+
+            {/*{showViewComments && (*/}
+            {/*    <Link href={`/jokes/${id}`} className={"view-comments-link"}>*/}
+            {/*        <ResText14Regular>view more</ResText14Regular>*/}
+            {/*    </Link>*/}
+            {/*)}*/}
         </Wrapper>
     );
 }

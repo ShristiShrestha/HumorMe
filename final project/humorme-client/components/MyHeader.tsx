@@ -45,7 +45,6 @@ const Wrapper = styled.div`
 
 export function MyHeader() {
     const dispatch = useDispatch();
-    const { loggedIn, user } = useSelector(selectAuth);
     const [localAuthJwt, setLocalAuthJwt] = useState<string | undefined>(
         undefined,
     );
@@ -92,8 +91,8 @@ export function MyHeader() {
     return (
         <Wrapper className={"h-justified-flex custom-layout"}>
             <Link href={"/"}>
-                <ResText18SemiBold className={"text-grey2 pointer-cursor"}>
-                    HumorMe
+                <ResText18SemiBold className={"text-grey1 pointer-cursor"}>
+                    HumorMe!
                 </ResText18SemiBold>
             </Link>
             <LoginView />

@@ -16,8 +16,14 @@ const withAppsLoad = WrappedComponent => {
         /******************* memoized callbacks ************************/
 
         const callbackLoadApps = useCallback(() => {
+            const isViewingUserProfile = router.pathname.includes("users");
+            const params = {
+                userId: isViewingUserProfile ? id : undefined,
+            };
+
+            // if viewing user profile, forceUpdate the jokes in redux
             // @ts-ignore
-            dispatch(fetchApps());
+            dispatch(fetchApps(params, isViewingUserProfile));
             // @ts-ignore
             dispatch(fetchMyJokeRatings());
         }, []);

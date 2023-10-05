@@ -10,7 +10,7 @@ import {
     SET_APPS,
     SET_MY_JOKE_RATINGS,
 } from "./types";
-import { UIJokeDetails } from "../../models/dto/JokeDto";
+import { JokeQuery, UIJokeDetails } from "../../models/dto/JokeDto";
 import { actionFailure, actionStart, actionSuccess } from "../common/actions";
 import myStore from "../store";
 import {
@@ -23,9 +23,9 @@ import { UICommentDetails, UIRatingDetails } from "../../models/dto/CommentDto";
 
 /****************** SET STATE ************************/
 
-export function setApps(apps: UIJokeDetails[]) {
+export function setApps(apps: UIJokeDetails[], forceUpdate: boolean) {
     return (dispatch: MyThunkDispatch) => {
-        const mergedAppsWithExisting = reformatAppsByIds(apps);
+        const mergedAppsWithExisting = reformatAppsByIds(apps, forceUpdate);
         dispatch({
             type: SET_APPS,
             payload: {
@@ -87,12 +87,12 @@ export const fetchApp = id => {
     };
 };
 
-export const fetchApps = (labels?: string) => {
+export const fetchApps = (params?: JokeQuery, forceUpdate = false) => {
     return (dispatch: MyThunkDispatch) => {
         dispatch(actionStart(FETCH_APPS));
-        getJokes(labels)
+        getJokes(params)
             .then((appsRes: any) => {
-                dispatch(setApps(appsRes));
+                dispatch(setApps(appsRes, forceUpdate));
                 dispatch(actionSuccess(FETCH_APPS, appsRes));
             })
             .catch(err => {
@@ -135,8 +135,13 @@ export const fetchAppReviews = (jokeId: number) => {
 };
 
 /******************* internal utils ************************/
-export const reformatAppsByIds = (newApps: UIJokeDetails[]) => {
-    let existingApps = myStore.getState()?.apps?.appsById || {};
+export const reformatAppsByIds = (
+    newApps: UIJokeDetails[],
+    forceUpdate: boolean,
+) => {
+    let existingApps = forceUpdate
+        ? {}
+        : myStore.getState()?.apps?.appsById || {};
 
     for (let index = 0; index < newApps.length; index++) {
         const appInfo = newApps[index];

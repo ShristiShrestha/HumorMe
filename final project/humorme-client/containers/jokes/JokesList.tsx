@@ -37,7 +37,6 @@ const ListContent = styled.div`
 
     .ant-list-items {
         display: grid;
-        row-gap: 32px;
     }
 
     .ant-list-item {
@@ -54,7 +53,7 @@ const LoadMoreDiv = styled.div`
 
 const { Item } = List;
 
-export default function JokesList() {
+export default function JokesList({ showSearch }) {
     const dispatch = useDispatch();
     const { appsById, searchAppsById, myJokesRatingsByIds } =
         useSelector(selectApps);
@@ -108,19 +107,27 @@ export default function JokesList() {
 
     return (
         <Wrapper>
-            <Input
-                placeholder={"Search by name, category "}
-                onPressEnter={e => handleSearch(e, false)}
-                allowClear
-                onChange={e => handleSearch(e, true)}
-            />
-            <ResText14Regular className={"text-grey2"}>
-                Found{" "}
-                <b>{showSearchRes ? searchApps.length : reduxApps.length}</b>{" "}
-                {(showSearchRes ? searchApps : reduxApps).length > 1
-                    ? "jokes"
-                    : "joke"}
-            </ResText14Regular>
+            {showSearch && (
+                <>
+                    <Input
+                        placeholder={"Search by name, category "}
+                        onPressEnter={e => handleSearch(e, false)}
+                        allowClear
+                        onChange={e => handleSearch(e, true)}
+                    />
+                    <ResText14Regular className={"text-grey2"}>
+                        Found{" "}
+                        <b>
+                            {showSearchRes
+                                ? searchApps.length
+                                : reduxApps.length}
+                        </b>{" "}
+                        {(showSearchRes ? searchApps : reduxApps).length > 1
+                            ? "jokes"
+                            : "joke"}
+                    </ResText14Regular>
+                </>
+            )}
             <ListContent>
                 {/* loadApps*/}
                 <Spin spinning={false}>

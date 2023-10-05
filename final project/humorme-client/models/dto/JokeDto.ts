@@ -15,8 +15,14 @@ export type UIJokeDetails = {
     labelRatings: LabelRatings;
     user: UIUserDetails;
     createdAt: Date;
+    totalComments?: number;
 };
 
 export type LabelRatings = {
     [level in JokeRatingLevels]: number;
+};
+
+export type JokeQuery = {
+    userId?: number;
+    text?: string;
 };
