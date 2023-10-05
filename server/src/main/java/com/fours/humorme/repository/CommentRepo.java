@@ -11,7 +11,10 @@ import java.util.List;
 @Repository
 public interface CommentRepo extends JpaRepository<Comment, Long> {
 
-    public List<Comment> findAllByJoke(Joke joke);
+    List<Comment> findAllByJoke(Joke joke);
+
+    Long countAllByJoke(Joke joke);
+
     @Transactional
-    public void deleteCommentsByJoke(Joke joke);
+    void deleteCommentsByJoke(Joke joke);
 }

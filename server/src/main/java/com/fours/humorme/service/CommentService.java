@@ -5,6 +5,7 @@ import com.fours.humorme.model.Comment;
 import com.fours.humorme.model.Joke;
 import com.fours.humorme.model.User;
 import com.fours.humorme.repository.CommentRepo;
+import com.fours.humorme.repository.JokeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,15 @@ import java.util.Optional;
 @Service
 public class CommentService {
     @Autowired private CommentRepo commentRepo;
+    @Autowired private JokeRepo jokeRepo;
+
     public Comment create(Joke joke, String text, User user){
      Comment comment = new Comment(text, joke, user);
-     return commentRepo.save(comment);
+     comment = commentRepo.save(comment);
+     Long existingTotalComments = commentRepo.countAllByJoke(joke);
+     joke.setTotalComments(existingTotalComments);
+     jokeRepo.save(joke);
+     return comment;
     }
 
     public Comment findById(Long id) throws NotFoundException {

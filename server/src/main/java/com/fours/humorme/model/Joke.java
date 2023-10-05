@@ -37,6 +37,10 @@ public class Joke {
     @ManyToOne
     private User user;
 
+    // count number of comments for this joke
+    @Column(name="total_comments")
+    private Long totalComments;
+
     public Joke(String title, String text, String labels){
         this.title = title;
         this.text = text;
