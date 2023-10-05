@@ -6,7 +6,7 @@ export type UIUserDetails = {
     createdAt: Date;
 
     followers: UIUserDetails[];
-    following: UIUserDetails[];
+    followings: UIUserDetails[];
 };
 
 export type PostUserDto = {

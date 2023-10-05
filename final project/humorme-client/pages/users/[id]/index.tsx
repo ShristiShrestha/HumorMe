@@ -143,7 +143,7 @@ export default function UserProfile() {
                     <ResText16Regular>
                         {viewUser?.followers?.length || 0} followers
                         <Divider type={"vertical"} />
-                        {viewUser?.following?.length || 0} followings
+                        {viewUser?.followings?.length || 0} followings
                     </ResText16Regular>
                     {user?.id && viewUser?.id !== user?.id && (
                         <div className={"h-start-flex user-follow"}>
