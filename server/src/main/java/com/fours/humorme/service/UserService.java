@@ -3,6 +3,7 @@ package com.fours.humorme.service;
 import com.fours.humorme.constants.ResponseMessage;
 import com.fours.humorme.dto.user.PostUserDto;
 import com.fours.humorme.dto.user.UserDto;
+import com.fours.humorme.dto.user.UserFollowDto;
 import com.fours.humorme.dto.user.UserMiniDto;
 import com.fours.humorme.exception.BadRequestException;
 import com.fours.humorme.exception.NotFoundException;
@@ -49,17 +50,32 @@ public class UserService {
         return userRepository.save(loggedUser);
     }
 
-    public User patchFollowing(User loggedUser, User toFollow){
+    public User patchFollowing(User loggedUser, User toFollow, UserFollowDto request){
         // who am I following
         Set<User> loggedUserFollowings = loggedUser.getFollowings();
-        // add one more following
-        loggedUserFollowings.add(toFollow);
-        loggedUser.setFollowings(loggedUserFollowings);
 
         // followers of who am I following
         Set<User> toFollowFollowers = toFollow.getFollowers();
-        // add one more (me) to the list of followers of whom I am following
-        toFollowFollowers.add(loggedUser);
+
+        // if asked to follow a user
+        if(request.getFollow() != null && request.getFollow()){
+            // add one more following
+            loggedUserFollowings.add(toFollow);
+
+            // add one more (me) to the list of followers of whom I am following
+            toFollowFollowers.add(loggedUser);
+        }
+
+        // else asked to unfollow the user
+        else{
+            // remove the one I am following
+            loggedUserFollowings.remove(toFollow);
+            // remove me from the followers list
+            toFollowFollowers.remove(loggedUser);
+        }
+
+        // update loggedUser and toFollowUser information in db table
+        loggedUser.setFollowings(loggedUserFollowings);
         toFollow.setFollowers(toFollowFollowers);
 
         userRepository.save(toFollow);

@@ -5,6 +5,7 @@ import com.fours.humorme.constants.ResponseMessage;
 import com.fours.humorme.constants.RoleConstants;
 import com.fours.humorme.dto.user.PostUserDto;
 import com.fours.humorme.dto.user.UserDto;
+import com.fours.humorme.dto.user.UserFollowDto;
 import com.fours.humorme.dto.user.UserMiniDto;
 import com.fours.humorme.exception.BadRequestException;
 import com.fours.humorme.exception.NotFoundException;
@@ -56,10 +57,10 @@ public class UserController {
     }
 
     @PatchMapping("/{id}/follow")
-    public ResponseEntity<UserDto> follow(@PathVariable Long id) throws NotFoundException, BadRequestException {
+    public ResponseEntity<UserDto> follow(@PathVariable Long id, @RequestBody UserFollowDto request) throws NotFoundException, BadRequestException {
         User loggedUser = userService.getAuthenticatedUser();
         User toFollow = userService.findById(id);
-        loggedUser = userService.patchFollowing(loggedUser, toFollow);
+        loggedUser = userService.patchFollowing(loggedUser, toFollow, request);
         return ResponseEntity.ok(new UserDto(loggedUser));
 
     }
