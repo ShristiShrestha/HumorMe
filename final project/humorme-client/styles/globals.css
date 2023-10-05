@@ -1024,8 +1024,14 @@ input[id^="search"]::placeholder {
 }
 
 /* antd buttons */
-.ant-btn, .ant-btn-primary {
+.ant-btn-primary {
     background: #0d3349;
+}
+
+.ant-btn-text {
+    background: white;
+    border: 1px solid #0d3349;
+    color: #0d3349;
 }
 
 .ant-btn:hover, .ant-btn-primary:hover {

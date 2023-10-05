@@ -42,3 +42,11 @@ export const patchUser = (request: any) => {
         data: request,
     });
 };
+
+export const followUser = (followUserId: number, follow: boolean) => {
+    return Api.apiCall<UIUserDetails>({
+        url: `/users/${followUserId}/follow`,
+        method: "PATCH",
+        data: { follow: follow },
+    });
+};

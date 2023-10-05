@@ -15,8 +15,11 @@ import {
 import { toMonthDateYearStr } from "../../../utils/DateUtils";
 import { Button, Divider, Form, Input, Modal } from "antd";
 import MyButton, { MyButtonType } from "../../../components/MyButton";
-import { patchUser } from "../../../axios/UsersApi";
+import { followUser, patchUser } from "../../../axios/UsersApi";
 import JokesList from "../../../containers/jokes/JokesList";
+import { UIUserDetails } from "../../../models/dto/UIUserDetails";
+import { openNotification } from "../../../utils/NotificationUtils";
+import { NotificationEnum } from "../../../models/enum/NotificationEnum";
 
 const { TextArea } = Input;
 
@@ -55,13 +58,15 @@ export default function UserProfile() {
 
     const { viewUser, user, loggedIn } = useSelector(selectAuth);
 
+    /******************* memos ************************/
+
     const loggedUserFollowViewUser = useMemo(() => {
         const filtered = viewUser?.followers?.filter(
             item => item.id === user?.id,
         );
         if (filtered) return filtered[0];
         return undefined;
-    }, [id, user?.id]);
+    }, [id, user?.id, user?.followers?.length, viewUser?.followers?.length]);
 
     /******************* use effects ************************/
 
@@ -82,7 +87,24 @@ export default function UserProfile() {
 
     /******************* handlers ************************/
 
-    const handleFollow = () => {};
+    const handleFollow = follow => {
+        if (viewUser?.id) {
+            followUser(viewUser?.id, follow)
+                .then((updatedLoggedUser: UIUserDetails) => {
+                    // @ts-ignore
+                    dispatch(setAuth(updatedLoggedUser));
+                    // @ts-ignore
+                    dispatch(fetchUser(id));
+                })
+                .catch(err => {
+                    openNotification(
+                        "Request failed",
+                        "",
+                        NotificationEnum.ERROR,
+                    );
+                });
+        }
+    };
 
     const handleProfileUpdate = data => {
         patchUser(data)
@@ -123,13 +145,22 @@ export default function UserProfile() {
                         <Divider type={"vertical"} />
                         {viewUser?.following?.length || 0} followings
                     </ResText16Regular>
-                    {viewUser?.id !== user?.id && (
+                    {user?.id && viewUser?.id !== user?.id && (
                         <div className={"h-start-flex user-follow"}>
                             <ResText16Regular className={"text-grey2"}>
                                 You {loggedUserFollowViewUser ? "" : "don't"}{" "}
                                 follow this person
                             </ResText16Regular>
-                            <Button type={"primary"} onClick={() => {}}>
+                            <Button
+                                type={
+                                    loggedUserFollowViewUser
+                                        ? "text"
+                                        : "primary"
+                                }
+                                onClick={() =>
+                                    handleFollow(!loggedUserFollowViewUser)
+                                }
+                            >
                                 <ResText14Regular>
                                     {!!user?.id &&
                                     loggedIn &&
