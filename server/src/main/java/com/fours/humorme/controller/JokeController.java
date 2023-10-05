@@ -10,6 +10,7 @@ import com.fours.humorme.model.User;
 import com.fours.humorme.service.AuthenticatedUserService;
 import com.fours.humorme.service.JokeService;
 import com.fours.humorme.service.UserService;
+import com.fours.humorme.specs.JokeQueryParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,8 +49,10 @@ public class JokeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Joke>> search(@RequestParam(required = false) String labels) {
-        List<Joke> jokes = jokeService.findAll();
+    public ResponseEntity<List<Joke>> search(
+            JokeQueryParams queryParams
+    ) {
+        List<Joke> jokes = jokeService.findAll(queryParams);
         return new ResponseEntity<>(jokes, HttpStatus.OK);
     }
 

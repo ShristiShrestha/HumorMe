@@ -11,6 +11,7 @@ import com.fours.humorme.model.User;
 import com.fours.humorme.repository.CommentRepo;
 import com.fours.humorme.repository.JokeRepo;
 import com.fours.humorme.repository.RateRepo;
+import com.fours.humorme.specs.JokeQueryParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,8 +76,8 @@ public class JokeService {
         throw new NotFoundException("Joke with id " + id + " is not found.");
     }
 
-    public List<Joke> findAll(){
-        return jokeRepo.findAll();
+    public List<Joke> findAll(JokeQueryParams params){
+        return jokeRepo.findAll(params.searchSpecs());
     }
 
     public List<Rate> findJokeRatings(Joke joke){ return rateRepo.findAllByJoke(joke);}
