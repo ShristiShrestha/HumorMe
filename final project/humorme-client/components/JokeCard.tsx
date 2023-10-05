@@ -19,6 +19,8 @@ import {
     LikeOutlined,
     SmileOutlined,
 } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { selectAuth } from "../redux/auth/reducer";
 
 const Wrapper = styled.div`
     width: 100%;
@@ -71,6 +73,7 @@ type Props = {
     showViewComments: boolean;
 };
 export default function JokeCard(props: Props) {
+    const { loggedIn, user } = useSelector(selectAuth);
     const { joke, myRating, showViewComments } = props;
 
     const labels = useMemo(
@@ -200,11 +203,13 @@ export default function JokeCard(props: Props) {
                         </div>
                     )}
 
-                    <LeaveJokeRatings
-                        joke={joke}
-                        myRating={myRating}
-                        showViewComments={showViewComments}
-                    />
+                    {loggedIn && user?.id && (
+                        <LeaveJokeRatings
+                            joke={joke}
+                            myRating={myRating}
+                            showViewComments={showViewComments}
+                        />
+                    )}
                 </div>
             </Wrapper>
         </Link>
