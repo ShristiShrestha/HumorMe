@@ -32,7 +32,8 @@ public class JokeQueryParams {
                if(text != null && text.length() > 0){
                    Predicate matchText = criteriaBuilder.like(criteriaBuilder.lower(root.get("text")), "%"+text+"%");
                    Predicate matchLabel = criteriaBuilder.like(criteriaBuilder.lower(root.get("labels")), "%"+text+"%");
-                   return criteriaBuilder.or(matchText, matchLabel);
+                   Predicate matchUser = criteriaBuilder.like(criteriaBuilder.lower(root.get("user").get("name")),"%"+text+"%");
+                   return criteriaBuilder.or(matchText, matchLabel, matchUser);
                }
            }catch (Exception ex){
 

@@ -17,4 +17,6 @@ public interface RateRepo extends JpaRepository<Rate, Long> {
     List<Rate> findAllByUser_Id(Long userId);
 
     Optional<Rate> findAllByUser_Id_AndJoke_Id(Long userId, Long jokeId);
+
+    void deleteRatesByJoke(Joke joke);
 }

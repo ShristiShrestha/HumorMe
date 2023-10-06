@@ -50,6 +50,8 @@ public class JokeService {
     public void delete(Long jokeId, User user) throws NotFoundException, NotAuthorizedException {
         Joke joke = findById(jokeId);
         if(joke.getUser().getId().equals(user.getId())){
+            // delete if any ratings exists for this joke
+            rateRepo.deleteRatesByJoke(joke);
             // delete if any comments exists for this joke
             commentRepo.deleteCommentsByJoke(joke);
             // then delete joke
