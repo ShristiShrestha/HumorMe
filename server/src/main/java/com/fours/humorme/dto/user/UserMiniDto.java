@@ -15,6 +15,8 @@ public class UserMiniDto {
 
     private String name;
 
+    private String bio;
+
     private String email;
 
     private Date createdAt;
@@ -22,6 +24,7 @@ public class UserMiniDto {
     UserMiniDto(User user) {
         this.id = user.getId();
         this.name = user.getName();
+        this.bio = user.getBio();
         this.email = user.getEmail();
         this.createdAt = user.getCreatedAt();
     }

@@ -25,6 +25,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @Column(length = 1023)
+    private String bio;
+
     @NotNull
     @Email
     @Column(unique = true)

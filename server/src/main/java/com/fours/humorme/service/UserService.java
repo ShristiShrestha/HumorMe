@@ -47,6 +47,7 @@ public class UserService {
 
     public User update(User loggedUser, UserMiniDto user) {
         loggedUser.setName(user.getName());
+        loggedUser.setBio(user.getBio());
         return userRepository.save(loggedUser);
     }
 
@@ -98,7 +99,8 @@ public class UserService {
 
     public User getAuthenticatedUser() throws NotFoundException {
         String authenticatedUsername = authService.getUsername();
-        Optional<User> user = userRepository.findByEmailOrName(authenticatedUsername, authenticatedUsername);
+        Optional<User> user = userRepository.findByEmail(authenticatedUsername);
+//        Optional<User> user = userRepository.findByEmailOrName(authenticatedUsername, authenticatedUsername);
         if(user.isPresent())
             return user.get();
         throw new NotFoundException("User with name " + authenticatedUsername + " is not found.");
