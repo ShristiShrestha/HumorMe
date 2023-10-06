@@ -19,6 +19,7 @@ import _ from "lodash";
 import { UserOutlined } from "@ant-design/icons";
 import { openNotification } from "../../utils/NotificationUtils";
 import { NotificationEnum } from "../../models/enum/NotificationEnum";
+import Link from "next/link";
 
 const Wrapper = styled.div`
     column-gap: 12px;
@@ -288,11 +289,13 @@ export default function LoginView() {
     return (
         <Wrapper className={"h-start-flex"}>
             {loggedIn && user?.id && (
-                <ResText16Regular>
-                    {" "}
-                    <UserOutlined style={{ marginRight: 6 }} />
-                    {user?.name}
-                </ResText16Regular>
+                <Link href={`/users/${user?.id}`}>
+                    <ResText16Regular className={"text-grey2"}>
+                        {" "}
+                        <UserOutlined style={{ marginRight: 6 }} />
+                        {user?.name}
+                    </ResText16Regular>
+                </Link>
             )}
             {loggedIn ? (
                 <MyButton
