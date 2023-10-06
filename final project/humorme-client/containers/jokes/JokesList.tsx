@@ -1,13 +1,13 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { selectApps } from "../../redux/apps/reducer";
-import { Input, List, Spin } from "antd";
+import { Input, List } from "antd";
 import { ResText14Regular } from "../../utils/TextUtils";
 import { grey3, grey5 } from "../../utils/ShadesUtils";
 import { selectAuth } from "../../redux/auth/reducer";
 import JokeCard from "../../components/JokeCard";
-import MyEmptyView from "../../components/MyEmtpyView";
+import { fetchApps } from "../../redux/apps/actions";
 
 const Wrapper = styled.div.attrs({
     className: "vertical-start-flex",
@@ -55,18 +55,11 @@ const { Item } = List;
 
 export default function JokesList({ showSearch }) {
     const dispatch = useDispatch();
-    const { appsById, searchAppsById, myJokesRatingsByIds } =
-        useSelector(selectApps);
-    const { user } = useSelector(selectAuth);
-    const [showSearchRes, setShowSearchRes] = useState(false);
-    const [loadApps, setLoadApps] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const { appsById, myJokesRatingsByIds } = useSelector(selectApps);
+    const { user, loggedIn } = useSelector(selectAuth);
 
     /******************* memoized variables ************************/
-
-    const searchApps = useMemo(
-        () => Object.values(searchAppsById) || [],
-        [showSearchRes, Object.keys(searchAppsById)],
-    );
 
     const reduxApps = useMemo(
         () =>
@@ -79,24 +72,32 @@ export default function JokesList({ showSearch }) {
     );
 
     /******************* event handlers ************************/
-    const handleSearch = (e, textCleared: boolean) => {
-        const text = e.target.value;
 
-        if (text.length < 1) {
-            return setShowSearchRes(false);
-        }
-
-        if (textCleared) return;
-
-        setLoadApps(true);
-        dispatch(
+    const handleSearch = (e: any, shouldFetch: boolean) => {
+        const query = e.target.value;
+        const params = {
+            text: e.target.value,
+        };
+        if (shouldFetch) {
             // @ts-ignore
-            fetchSearchApps(text, undefined, undefined, () => {
-                setShowSearchRes(true);
-                setLoadApps(false);
-            }),
-        );
+            dispatch(fetchApps(params, true));
+        }
+        setSearchQuery(query);
+        // if (searchQuery.length < 1 && query.length > 0) {
+        //     setSearchQuery(query);
+        // } else if (searchQuery.length > 1 && query.length < 1) {
+        //     setSearchQuery(query);
+        // }
     };
+
+    /******************* use effects ************************/
+
+    useEffect(() => {
+        if (searchQuery.length < 1) {
+            // @ts-ignore
+            dispatch(fetchApps({}, true));
+        }
+    }, [searchQuery.length]);
 
     /******************* render ************************/
 
@@ -110,47 +111,36 @@ export default function JokesList({ showSearch }) {
             {showSearch && (
                 <>
                     <Input
-                        placeholder={"Search by name, category "}
-                        onPressEnter={e => handleSearch(e, false)}
+                        placeholder={"Search by joke, author, label... "}
+                        onPressEnter={e => handleSearch(e, true)}
+                        onChange={e => handleSearch(e, false)}
                         allowClear
-                        onChange={e => handleSearch(e, true)}
                     />
                     <ResText14Regular className={"text-grey2"}>
-                        Found{" "}
-                        <b>
-                            {showSearchRes
-                                ? searchApps.length
-                                : reduxApps.length}
-                        </b>{" "}
-                        {(showSearchRes ? searchApps : reduxApps).length > 1
-                            ? "jokes"
-                            : "joke"}
+                        Found <b>{reduxApps.length}</b>{" "}
+                        {reduxApps.length > 1 ? "jokes" : "joke"}
                     </ResText14Regular>
                 </>
             )}
             <ListContent>
-                {/* loadApps*/}
-                <Spin spinning={false}>
-                    <List
-                        dataSource={showSearchRes ? searchApps : reduxApps}
-                        bordered={false}
-                        renderItem={(app: any) => (
-                            <Item>
-                                <JokeCard
-                                    joke={app}
-                                    showViewComments={true}
-                                    myRating={
-                                        myJokesRatingsByIds &&
-                                        Object.keys(myJokesRatingsByIds)
-                                            .length > 0
-                                            ? myJokesRatingsByIds[app.id]
-                                            : undefined
-                                    }
-                                />
-                            </Item>
-                        )}
-                    />
-                </Spin>
+                <List
+                    dataSource={reduxApps}
+                    bordered={false}
+                    renderItem={(app: any) => (
+                        <Item>
+                            <JokeCard
+                                joke={app}
+                                showViewComments={true}
+                                myRating={
+                                    myJokesRatingsByIds &&
+                                    Object.keys(myJokesRatingsByIds).length > 0
+                                        ? myJokesRatingsByIds[app.id]
+                                        : undefined
+                                }
+                            />
+                        </Item>
+                    )}
+                />
             </ListContent>
         </Wrapper>
     );
