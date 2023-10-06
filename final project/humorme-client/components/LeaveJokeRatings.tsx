@@ -2,20 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { JokeRatingLevels } from "../models/enum/JokeEnum";
 import { ResText14Regular } from "../utils/TextUtils";
-import {
-    amethyst,
-    grey2,
-    grey3,
-    grey6,
-    pearl,
-    snow,
-} from "../utils/ShadesUtils";
+import { grey2, grey3, grey6, pearl } from "../utils/ShadesUtils";
 import { postJokeRating } from "../axios/JokesApi";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchMyJokeRatings, setApp } from "../redux/apps/actions";
-import Link from "next/link";
-import { selectAuth } from "../redux/auth/reducer";
-import { selectApps } from "../redux/apps/reducer";
 import { UIJokeDetails } from "../models/dto/JokeDto";
 import { UIRatingDetails } from "../models/dto/CommentDto";
 
@@ -71,8 +61,6 @@ export default function LeaveJokeRatings(props: Props) {
     const dispatch = useDispatch();
     const { joke, myRating, showViewComments } = props;
     const { id } = joke;
-    const { user, loggedIn } = useSelector(selectAuth);
-    const {} = useSelector(selectApps);
 
     /******************* handlers ************************/
     const handleRating = (e, label: JokeRatingLevels) => {

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { UIJokeDetails } from "../models/dto/JokeDto";
 import styled from "styled-components";
-import { grey1, grey2, grey3, grey5, grey6 } from "../utils/ShadesUtils";
+import { grey1, grey3, grey5, grey6 } from "../utils/ShadesUtils";
 import {
     ResText14Regular,
     ResText16Regular,
@@ -14,13 +14,12 @@ import { toMonthDateStr } from "../utils/DateUtils";
 import Link from "next/link";
 import { sum } from "lodash";
 import { Divider, Tag } from "antd";
-import {
-    CommentOutlined,
-    LikeOutlined,
-    SmileOutlined,
-} from "@ant-design/icons";
+import { CommentOutlined, SmileOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { selectAuth } from "../redux/auth/reducer";
+import { getTruncVal } from "../utils/StringUtils";
+import { MeTag } from "./MeTag";
+import { useRouter } from "next/router";
 
 const Wrapper = styled.div`
     width: 100%;
@@ -29,6 +28,7 @@ const Wrapper = styled.div`
     align-items: flex-start;
     color: ${grey1};
     padding: 24px;
+    background: #fcfcfc;
     // border: 1px solid ${grey6};
     border-bottom: 1px solid ${grey6};
 
@@ -52,7 +52,7 @@ const Wrapper = styled.div`
     :hover {
         // border: 1px solid ${grey5};
         border-radius: 4px;
-        background: #fcfcfc;
+        background: #fcfcfc !important;
         // box-shadow: 16px 6px 4px ${grey5};
 
         .view-comments-link {
@@ -75,6 +75,7 @@ type Props = {
 export default function JokeCard(props: Props) {
     const { loggedIn, user } = useSelector(selectAuth);
     const { joke, myRating, showViewComments } = props;
+    const router = useRouter();
 
     const labels = useMemo(
         () => (joke && joke.labels ? joke.labels.split(",") : []),
@@ -88,7 +89,7 @@ export default function JokeCard(props: Props) {
                     ? Object.values(joke.labelRatings)
                     : [],
             ),
-        [joke?.id],
+        [joke?.id, joke && Object.values(joke.labelRatings)],
     );
     const maxRating = useMemo(
         () =>
@@ -97,12 +98,19 @@ export default function JokeCard(props: Props) {
                       (firstItem, secondItem) => secondItem[1] - firstItem[1],
                   )[0]
                 : [],
-        [joke.labelRatings],
+        [joke?.id, joke && Object.values(joke.labelRatings)],
     );
 
     return (
         <Link href={`/jokes/${joke?.id}`} className={"full-width"}>
-            <Wrapper className={"vertical-start-flex"}>
+            <Wrapper
+                className={"vertical-start-flex"}
+                style={{
+                    background: router.pathname.includes("jokes")
+                        ? "#fcfcfc"
+                        : "white",
+                }}
+            >
                 <div className={"h-justified-flex joke-title"}>
                     <span className={"h-start-flex joke-title-user"}>
                         <Image
@@ -114,6 +122,9 @@ export default function JokeCard(props: Props) {
                         <Link href={`/users/${joke.user.id}`}>
                             <ResText14Regular className={"text-grey3"}>
                                 {joke.user.name}
+                                {loggedIn &&
+                                    user?.id &&
+                                    user?.id === joke?.user?.id && <MeTag />}
                             </ResText14Regular>
                         </Link>
                     </span>
@@ -123,7 +134,6 @@ export default function JokeCard(props: Props) {
                 </div>
                 <div className={"vertical-start-flex joke-content"}>
                     <ResText24SemiBold>{joke.text}</ResText24SemiBold>
-                    {/*<ResText18Regular>{joke.text}</ResText18Regular>*/}
                 </div>
                 <div className={"vertical-start-flex joke-ratings"}>
                     {(totalRating > 0 ||
@@ -141,13 +151,14 @@ export default function JokeCard(props: Props) {
                                         />
                                         {totalRating}
                                     </ResText16Regular>{" "}
-                                    <Divider type={"vertical"} />
+                                    {/*<Divider type={"vertical"} />*/}
                                 </>
                             )}
 
                             {/* total text comments */}
                             {joke?.totalComments && joke?.totalComments > 0 && (
                                 <>
+                                    <Divider type={"vertical"} />
                                     <ResText16Regular>
                                         <CommentOutlined
                                             style={{
@@ -157,7 +168,7 @@ export default function JokeCard(props: Props) {
                                         />
                                         {joke.totalComments}
                                     </ResText16Regular>
-                                    <Divider type={"vertical"} />
+                                    {/*<Divider type={"vertical"} />*/}
                                 </>
                             )}
 
@@ -166,29 +177,37 @@ export default function JokeCard(props: Props) {
                                 maxRating?.length > 1 &&
                                 totalRating > 0 && (
                                     <>
+                                        <Divider type={"vertical"} />
                                         <ResText16Regular
                                             className={"text-grey2"}
                                         >
-                                            {100 * (maxRating[1] / totalRating)}
+                                            {getTruncVal(
+                                                100 *
+                                                    (maxRating[1] /
+                                                        totalRating),
+                                            )}
                                             % found this{" "}
                                             {maxRating[0]
                                                 ?.replace("=", "")
                                                 ?.toLowerCase()}
                                         </ResText16Regular>
-                                        <Divider type={"vertical"} />
+                                        {/*<Divider type={"vertical"} />*/}
                                     </>
                                 )}
 
                             {/* your rating */}
                             {myRating && (
-                                <ResText14Regular className={"text-grey3"}>
-                                    You found this{" "}
-                                    <i className={"text-grey2"}>
-                                        {myRating?.label
-                                            ?.toLowerCase()
-                                            ?.replace("=", "")}
-                                    </i>
-                                </ResText14Regular>
+                                <>
+                                    <Divider type={"vertical"} />
+                                    <ResText14Regular className={"text-grey3"}>
+                                        You found this{" "}
+                                        <i className={"text-grey2"}>
+                                            {myRating?.label
+                                                ?.toLowerCase()
+                                                ?.replace("=", "")}
+                                        </i>
+                                    </ResText14Regular>
+                                </>
                             )}
                         </span>
                     )}
@@ -203,7 +222,7 @@ export default function JokeCard(props: Props) {
                         </div>
                     )}
 
-                    {loggedIn && user?.id && (
+                    {loggedIn && user?.id && user?.id !== joke?.user?.id && (
                         <LeaveJokeRatings
                             joke={joke}
                             myRating={myRating}

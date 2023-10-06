@@ -1,6 +1,7 @@
 export type UIUserDetails = {
     id: number;
     name: string;
+    bio?: string;
     email: string;
     isEnabled: boolean;
     createdAt: Date;

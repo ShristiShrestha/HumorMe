@@ -20,6 +20,7 @@ const Wrapper = styled.div`
     .write-comment {
         margin-top: 12px;
     }
+
     .view-comments {
         row-gap: 20px;
     }
@@ -79,7 +80,7 @@ export default function ViewComments() {
                         style={{ width: "100%" }}
                     >
                         <Form.Item
-                            label="Anything to say about this joke?"
+                            label="Anything you want to say to this joke?"
                             name="text"
                             rules={[
                                 {
@@ -90,7 +91,7 @@ export default function ViewComments() {
                         >
                             <TextArea
                                 placeholder="Maximum of 250 characters"
-                                autoSize={{ minRows: 3, maxRows: 5 }}
+                                autoSize={{ minRows: 5 }}
                             />
                         </Form.Item>
                         <Form.Item className={"h-end-flex"}>

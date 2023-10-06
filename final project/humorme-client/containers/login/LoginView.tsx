@@ -17,9 +17,12 @@ import { setAuth } from "../../redux/auth/actions";
 import { selectAuth } from "../../redux/auth/reducer";
 import _ from "lodash";
 import { UserOutlined } from "@ant-design/icons";
+import { openNotification } from "../../utils/NotificationUtils";
+import { NotificationEnum } from "../../models/enum/NotificationEnum";
 
 const Wrapper = styled.div`
     column-gap: 12px;
+
     .auth-options {
         row-gap: 12px;
         column-gap: 12px;
@@ -95,12 +98,16 @@ export default function LoginView() {
                 handleModal(false);
             })
             .catch(err => {
-                console.error("sign in error: ", err);
-                notification.error({
-                    message:
-                        "Failed to sign in. Please try with correct passcode.",
-                    placement: "topRight",
-                });
+                const errorMessage = _.get(
+                    err,
+                    "response.data",
+                    "Failed to sign in. Please try again.",
+                );
+                return openNotification(
+                    "Error",
+                    errorMessage,
+                    NotificationEnum.ERROR,
+                );
             });
     };
 
@@ -112,23 +119,26 @@ export default function LoginView() {
             });
 
         signup(authParams)
-            .then(res => {})
+            .then(res => {
+                openNotification(
+                    "Sign up success!",
+                    "You have successfully signed up. Sign in to post your own jokes.",
+                    NotificationEnum.SUCCESS,
+                );
+            })
             .catch(err => {
                 let errorMessage =
                     "Failed to sign up. Please try with correct passcode.";
-                console.error("sign up error: ", err);
-                const status = _.get(err, "response.status", undefined);
-                if (status === 403) {
-                    errorMessage = "Please enter a valid email address.";
-                }
-                if (status === 404) {
-                    errorMessage =
-                        "We do not have any slot available. Please contact support for more info.";
-                }
-                notification.error({
-                    message: errorMessage,
-                    placement: "topRight",
-                });
+                let serverErrorMessage = _.get(
+                    err,
+                    "response.data",
+                    errorMessage,
+                );
+                return openNotification(
+                    "Error",
+                    serverErrorMessage,
+                    NotificationEnum.ERROR,
+                );
             });
     };
 
@@ -148,7 +158,7 @@ export default function LoginView() {
 
     /******************* handlers ************************/
     const handleModal = (open, tabKey = "1") => {
-        setOpenModal({ open: open, defaultTab: tabKey });
+        setOpenModal({ ...openModal, open: open, defaultTab: tabKey });
     };
 
     /******************* render ************************/
@@ -156,7 +166,7 @@ export default function LoginView() {
     const renderSignInForm = (
         <Form
             name="basic"
-            labelCol={{ span: 4 }}
+            labelCol={{ span: 6 }}
             wrapperCol={{ span: 24 }}
             style={{ width: "100%" }}
             initialValues={authParams}
@@ -204,7 +214,7 @@ export default function LoginView() {
     const renderSignUpForm = (
         <Form
             name="basic"
-            labelCol={{ span: 4 }}
+            labelCol={{ span: 6 }}
             wrapperCol={{ span: 24 }}
             style={{ width: "100%" }}
             initialValues={authParams}
@@ -294,17 +304,17 @@ export default function LoginView() {
             ) : (
                 <div className={"h-start-flex auth-options"}>
                     <MyButton
-                        text={"Sign up"}
+                        text={"My Account"}
                         showLoading={true}
                         onClick={() => handleModal(true, "2")}
                         btnType={MyButtonType.secondary}
                     />
-                    <MyButton
-                        text={"Sign in"}
-                        showLoading={true}
-                        onClick={() => handleModal(true, "1")}
-                        btnType={MyButtonType.primary}
-                    />
+                    {/*<MyButton*/}
+                    {/*    text={"Sign in"}*/}
+                    {/*    showLoading={true}*/}
+                    {/*    onClick={() => handleModal(true, "1")}*/}
+                    {/*    btnType={MyButtonType.primary}*/}
+                    {/*/>*/}
                 </div>
             )}
             <Modal

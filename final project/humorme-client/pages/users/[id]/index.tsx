@@ -20,6 +20,8 @@ import JokesList from "../../../containers/jokes/JokesList";
 import { UIUserDetails } from "../../../models/dto/UIUserDetails";
 import { openNotification } from "../../../utils/NotificationUtils";
 import { NotificationEnum } from "../../../models/enum/NotificationEnum";
+import { UserOutlined } from "@ant-design/icons";
+import { BackIconWithText } from "../../jokes/[id]";
 
 const { TextArea } = Input;
 
@@ -124,6 +126,7 @@ export default function UserProfile() {
     return (
         <>
             <Wrapper className={"vertical-start-flex"}>
+                {BackIconWithText("/", "home")}
                 {/* view user profile */}
                 <div className={"centered-flex user-profile"}>
                     <Image
@@ -133,8 +136,14 @@ export default function UserProfile() {
                         height={100}
                     />
                     <ResText18SemiBold className={"text-grey2"}>
+                        <UserOutlined style={{ marginRight: 8 }} />
                         {viewUser?.name}
                     </ResText18SemiBold>
+                    {viewUser?.bio && viewUser?.bio?.length > 0 && (
+                        <ResText16Regular className={"text-grey2"}>
+                            {viewUser?.bio}
+                        </ResText16Regular>
+                    )}
                     <ResText16Regular className={"text-grey3"}>
                         Joined in{" "}
                         {viewUser &&
@@ -201,6 +210,7 @@ export default function UserProfile() {
                         layout={"vertical"}
                         initialValues={{
                             name: user?.name,
+                            bio: user?.bio,
                         }}
                         onFinish={handleProfileUpdate}
                         style={{ width: "100%" }}

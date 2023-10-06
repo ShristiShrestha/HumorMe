@@ -2,17 +2,11 @@ import React from "react";
 import { ResText14Regular, ResText16Regular } from "../utils/TextUtils";
 import Image from "next/image";
 import styled from "styled-components";
-import {
-    crimson,
-    grey5,
-    grey6,
-    lightBanana,
-    lightRed,
-    pearl,
-} from "../utils/ShadesUtils";
-import { Divider, Tag } from "antd";
+import { grey6 } from "../utils/ShadesUtils";
+import { Divider } from "antd";
 import { toMonthDateStr } from "../utils/DateUtils";
 import { MeTag } from "./MeTag";
+import Link from "next/link";
 
 const Wrapper = styled.div`
     row-gap: 24px;
@@ -47,10 +41,12 @@ export default function CommentCard({ comment, loggedUser }) {
                     width={20}
                     height={20}
                 />
-                <ResText14Regular className={"text-grey1"}>
-                    {user?.name}
-                    {user?.id === loggedUser?.id && <MeTag />}
-                </ResText14Regular>
+                <Link href={`/users/${user?.id}`}>
+                    <ResText14Regular className={"text-grey1"}>
+                        {user?.name}
+                        {user?.id === loggedUser?.id && <MeTag />}
+                    </ResText14Regular>
+                </Link>
                 <Divider type={"vertical"} />
                 <ResText14Regular className={"text-grey3"}>
                     {toMonthDateStr(new Date(createdAt))}
