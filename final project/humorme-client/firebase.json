@@ -8,12 +8,12 @@
     ],
     "rewrites": [
       {
-        "source": "/apps/**/reviews",
-        "destination": "/apps/[id]/reviews.html"
+        "source": "/users/**",
+        "destination": "/users/[id].html"
       },
       {
-        "source": "/apps/**",
-        "destination": "/apps/[id].html"
+        "source": "/jokes/**",
+        "destination": "/jokes/[id].html"
       },
       {
         "source": "**",
