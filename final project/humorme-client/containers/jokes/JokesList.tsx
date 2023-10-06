@@ -5,9 +5,13 @@ import { selectApps } from "../../redux/apps/reducer";
 import { Input, List } from "antd";
 import { ResText14Regular } from "../../utils/TextUtils";
 import { grey3, grey5 } from "../../utils/ShadesUtils";
-import { selectAuth } from "../../redux/auth/reducer";
 import JokeCard from "../../components/JokeCard";
 import { fetchApps } from "../../redux/apps/actions";
+import { deleteJoke } from "../../axios/JokesApi";
+import { openNotification } from "../../utils/NotificationUtils";
+import { NotificationEnum } from "../../models/enum/NotificationEnum";
+import { isString } from "lodash";
+import { useRouter } from "next/router";
 
 const Wrapper = styled.div.attrs({
     className: "vertical-start-flex",
@@ -55,9 +59,9 @@ const { Item } = List;
 
 export default function JokesList({ showSearch }) {
     const dispatch = useDispatch();
+    const router = useRouter();
     const [searchQuery, setSearchQuery] = useState("");
     const { appsById, myJokesRatingsByIds } = useSelector(selectApps);
-    const { user, loggedIn } = useSelector(selectAuth);
 
     /******************* memoized variables ************************/
 
@@ -68,7 +72,7 @@ export default function JokesList({ showSearch }) {
                     new Date(second["createdAt"]).getTime() -
                     new Date(first["createdAt"]).getTime(),
             ) || [],
-        [Object.keys(appsById)],
+        [Object.keys(appsById), Object.keys(appsById).length],
     );
 
     /******************* event handlers ************************/
@@ -88,6 +92,28 @@ export default function JokesList({ showSearch }) {
         // } else if (searchQuery.length > 1 && query.length < 1) {
         //     setSearchQuery(query);
         // }
+    };
+
+    const handleDeleteJoke = (jokeId: number) => {
+        deleteJoke(jokeId)
+            .then(res => {
+                openNotification(
+                    "Remove success",
+                    "You have successfully removed your joke.",
+                    NotificationEnum.SUCCESS,
+                );
+
+                if (
+                    router.query?.id &&
+                    isString(router.query.id) &&
+                    router.pathname.includes("users")
+                ) {
+                    const userId = router.query.id;
+                    // @ts-ignore
+                    dispatch(fetchApps({ userId: userId }, true));
+                }
+            })
+            .catch(err => {});
     };
 
     /******************* use effects ************************/
@@ -131,6 +157,7 @@ export default function JokesList({ showSearch }) {
                             <JokeCard
                                 joke={app}
                                 showViewComments={true}
+                                handleDelete={id => handleDeleteJoke(id)}
                                 myRating={
                                     myJokesRatingsByIds &&
                                     Object.keys(myJokesRatingsByIds).length > 0

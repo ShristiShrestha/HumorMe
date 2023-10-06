@@ -27,6 +27,13 @@ export const getJoke = (id: number) => {
     });
 };
 
+export const deleteJoke = (id: number) => {
+    return Api.apiCall<UIJokeDetails>({
+        url: `/jokes/${id}`,
+        method: "DELETE",
+    });
+};
+
 /******************* joke comment ************************/
 
 export const postJokeComment = (
