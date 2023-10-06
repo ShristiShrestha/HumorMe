@@ -12,7 +12,7 @@ import {
 import MyButton, { MyButtonType } from "../../components/MyButton";
 import { ResText16Regular, ResText20SemiBold } from "../../utils/TextUtils";
 import { useDispatch, useSelector } from "react-redux";
-import { login, signup } from "../../axios/UsersApi";
+import { checkLogin, login, signup } from "../../axios/UsersApi";
 import { setAuth } from "../../redux/auth/actions";
 import { selectAuth } from "../../redux/auth/reducer";
 import _ from "lodash";
@@ -89,19 +89,21 @@ export default function LoginView() {
 
     const handleLogin = authParams => {
         login(authParams)
-            .then(res => {
-                if (res) {
-                    // @ts-ignore
-                    // dispatch(setAuth(authParams)); // make server API return user info
-                }
-                // @ts-ignore
-                dispatch(setAuth(authParams)); // todo: remove here
-                handleModal(false);
+            .then(authRes => {
+                checkLogin()
+                    .then(res => {
+                        if (res?.id) {
+                            // @ts-ignore
+                            dispatch(setAuth(res));
+                            handleModal(false);
+                        }
+                    })
+                    .catch(err => {});
             })
             .catch(err => {
                 const errorMessage = _.get(
                     err,
-                    "response.data",
+                    "response.data.message",
                     "Failed to sign in. Please try again.",
                 );
                 return openNotification(

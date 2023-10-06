@@ -15,7 +15,6 @@ import {
     ResText16Regular,
     ResText24SemiBold,
 } from "../utils/TextUtils";
-import LeaveJokeRatings from "./LeaveJokeRatings";
 import { UIRatingDetails } from "../models/dto/CommentDto";
 import Image from "next/image";
 import { toMonthDateStr } from "../utils/DateUtils";
@@ -28,6 +27,7 @@ import { selectAuth } from "../redux/auth/reducer";
 import { getTruncVal } from "../utils/StringUtils";
 import { MeTag } from "./MeTag";
 import { useRouter } from "next/router";
+import LeaveJokeRatings from "./LeaveJokeRatings";
 
 const Wrapper = styled.div`
     width: 100%;
@@ -120,8 +120,166 @@ export default function JokeCard(props: Props) {
         [joke?.id, joke && Object.values(joke.labelRatings)],
     );
 
-    return (
-        // <Link href={`/jokes/${joke?.id}`} className={"full-width"}>
+    const cardTitle = (
+        <div className={"h-justified-flex joke-title"}>
+            <span className={"h-start-flex joke-title-user"}>
+                <Image
+                    src={"/default_user.png"}
+                    alt={"default user"}
+                    width={20}
+                    height={20}
+                />
+                <Link href={`/users/${joke.user.id}`}>
+                    <ResText14Regular className={"text-grey3"}>
+                        {joke.user.name}
+                        {loggedIn &&
+                            user?.id &&
+                            user?.id === joke?.user?.id && <MeTag />}
+                    </ResText14Regular>
+                </Link>
+            </span>
+            <span className={"h-start-flex joke-actions"}>
+                <ResText14Regular className={"text-grey2 text-italic"}>
+                    {toMonthDateStr(new Date(joke.createdAt))}
+                </ResText14Regular>
+                {loggedIn &&
+                    user?.id &&
+                    joke &&
+                    router.pathname.includes("users") &&
+                    user?.id === joke?.user?.id && (
+                        <Popconfirm
+                            title="Caution"
+                            description={
+                                <div className={"vertical-start-flex"}>
+                                    <ResText14Regular className={"text-grey2"}>
+                                        It will remove all comments and ratings
+                                        associated with this joke.
+                                    </ResText14Regular>
+                                    <ResText14SemiBold className={"text-grey2"}>
+                                        Are you sure to remove this joke?
+                                    </ResText14SemiBold>
+                                </div>
+                            }
+                            onConfirm={e => {
+                                if (e) {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    handleDelete && handleDelete(joke.id);
+                                }
+                            }}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button
+                                className={"btn-danger"}
+                                type={"default"}
+                                onChange={e => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                }}
+                            >
+                                remove
+                            </Button>
+                        </Popconfirm>
+                    )}
+            </span>
+        </div>
+    );
+
+    const cardRatings = (
+        <div className={"vertical-start-flex joke-ratings"}>
+            {(totalRating > 0 ||
+                (joke?.totalComments && joke?.totalComments > 0)) && (
+                <span>
+                    {/* total ratings */}
+                    {totalRating > 0 && (
+                        <>
+                            <ResText16Regular>
+                                <SmileOutlined
+                                    style={{
+                                        marginRight: 6,
+                                        color: grey3,
+                                    }}
+                                />
+                                {totalRating}
+                            </ResText16Regular>{" "}
+                            {/*<Divider type={"vertical"} />*/}
+                        </>
+                    )}
+
+                    {/* total text comments */}
+                    {joke?.totalComments && joke?.totalComments > 0 && (
+                        <>
+                            <Divider type={"vertical"} />
+                            <ResText16Regular>
+                                <CommentOutlined
+                                    style={{
+                                        marginRight: 6,
+                                        color: grey3,
+                                    }}
+                                />
+                                {joke.totalComments}
+                            </ResText16Regular>
+                            {/*<Divider type={"vertical"} />*/}
+                        </>
+                    )}
+
+                    {/* max people rating */}
+                    {maxRating &&
+                        maxRating?.length > 1 &&
+                        totalRating > 0 &&
+                        maxRating[1] < totalRating && (
+                            <>
+                                <Divider type={"vertical"} />
+                                <ResText16Regular className={"text-grey2"}>
+                                    {getTruncVal(
+                                        100 * (maxRating[1] / totalRating),
+                                    )}
+                                    % found this{" "}
+                                    {maxRating[0]
+                                        ?.replace("=", "")
+                                        ?.toLowerCase()}
+                                </ResText16Regular>
+                                {/*<Divider type={"vertical"} />*/}
+                            </>
+                        )}
+
+                    {/* your rating */}
+                    {myRating && (
+                        <>
+                            <Divider type={"vertical"} />
+                            <ResText14Regular className={"text-grey3"}>
+                                You found this{" "}
+                                <i className={"text-grey2"}>
+                                    {myRating?.label
+                                        ?.toLowerCase()
+                                        ?.replace("=", "")}
+                                </i>
+                            </ResText14Regular>
+                        </>
+                    )}
+                </span>
+            )}
+
+            {labels.length > 0 && (
+                <div className={"h-start-flex"}>
+                    {labels.map(item => (
+                        <Tag key={"joke-" + item}>{item.toLowerCase()}</Tag>
+                    ))}
+                </div>
+            )}
+
+            {loggedIn && user?.id && joke?.user?.id !== user?.id && (
+                <LeaveJokeRatings
+                    joke={joke}
+                    myRating={myRating}
+                    showViewComments={showViewComments}
+                />
+            )}
+        </div>
+    );
+
+    const cardWrapper = (
         <Wrapper
             className={"vertical-start-flex"}
             style={{
@@ -130,166 +288,24 @@ export default function JokeCard(props: Props) {
                     : "white",
             }}
         >
-            <div className={"h-justified-flex joke-title"}>
-                <span className={"h-start-flex joke-title-user"}>
-                    <Image
-                        src={"/default_user.png"}
-                        alt={"default user"}
-                        width={20}
-                        height={20}
-                    />
-                    <Link href={`/users/${joke.user.id}`}>
-                        <ResText14Regular className={"text-grey3"}>
-                            {joke.user.name}
-                            {loggedIn &&
-                                user?.id &&
-                                user?.id === joke?.user?.id && <MeTag />}
-                        </ResText14Regular>
-                    </Link>
-                </span>
-                <span className={"h-start-flex joke-actions"}>
-                    <ResText14Regular className={"text-grey2 text-italic"}>
-                        {toMonthDateStr(new Date(joke.createdAt))}
-                    </ResText14Regular>
-                    {loggedIn &&
-                        user?.id &&
-                        joke &&
-                        router.pathname.includes("users") &&
-                        user?.id === joke?.user?.id && (
-                            <Popconfirm
-                                title="Caution"
-                                description={
-                                    <div className={"vertical-start-flex"}>
-                                        <ResText14Regular
-                                            className={"text-grey2"}
-                                        >
-                                            It will remove all comments and
-                                            ratings associated with this joke.
-                                        </ResText14Regular>
-                                        <ResText14SemiBold
-                                            className={"text-grey2"}
-                                        >
-                                            Are you sure to remove this joke?
-                                        </ResText14SemiBold>
-                                    </div>
-                                }
-                                onConfirm={e => {
-                                    if (e) {
-                                        e.stopPropagation();
-                                        e.preventDefault();
-                                        handleDelete && handleDelete(joke.id);
-                                    }
-                                }}
-                                okText="Yes"
-                                cancelText="No"
-                            >
-                                <Button
-                                    className={"btn-danger"}
-                                    type={"default"}
-                                    onChange={e => {
-                                        e.stopPropagation();
-                                        e.preventDefault();
-                                    }}
-                                >
-                                    remove
-                                </Button>
-                            </Popconfirm>
-                        )}
-                </span>
-            </div>
+            {cardTitle}
             <div className={"vertical-start-flex joke-content"}>
-                <ResText24SemiBold>{joke.text}</ResText24SemiBold>
+                <Link href={`/jokes/${joke?.id}`}>
+                    <ResText24SemiBold className={"text-grey2"}>
+                        {joke.text}
+                    </ResText24SemiBold>
+                </Link>
             </div>
-            <div className={"vertical-start-flex joke-ratings"}>
-                {(totalRating > 0 ||
-                    (joke?.totalComments && joke?.totalComments > 0)) && (
-                    <span>
-                        {/* total ratings */}
-                        {totalRating > 0 && (
-                            <>
-                                <ResText16Regular>
-                                    <SmileOutlined
-                                        style={{
-                                            marginRight: 6,
-                                            color: grey3,
-                                        }}
-                                    />
-                                    {totalRating}
-                                </ResText16Regular>{" "}
-                                {/*<Divider type={"vertical"} />*/}
-                            </>
-                        )}
 
-                        {/* total text comments */}
-                        {joke?.totalComments && joke?.totalComments > 0 && (
-                            <>
-                                <Divider type={"vertical"} />
-                                <ResText16Regular>
-                                    <CommentOutlined
-                                        style={{
-                                            marginRight: 6,
-                                            color: grey3,
-                                        }}
-                                    />
-                                    {joke.totalComments}
-                                </ResText16Regular>
-                                {/*<Divider type={"vertical"} />*/}
-                            </>
-                        )}
-
-                        {/* max people rating */}
-                        {maxRating &&
-                            maxRating?.length > 1 &&
-                            totalRating > 0 && (
-                                <>
-                                    <Divider type={"vertical"} />
-                                    <ResText16Regular className={"text-grey2"}>
-                                        {getTruncVal(
-                                            100 * (maxRating[1] / totalRating),
-                                        )}
-                                        % found this{" "}
-                                        {maxRating[0]
-                                            ?.replace("=", "")
-                                            ?.toLowerCase()}
-                                    </ResText16Regular>
-                                    {/*<Divider type={"vertical"} />*/}
-                                </>
-                            )}
-
-                        {/* your rating */}
-                        {myRating && (
-                            <>
-                                <Divider type={"vertical"} />
-                                <ResText14Regular className={"text-grey3"}>
-                                    You found this{" "}
-                                    <i className={"text-grey2"}>
-                                        {myRating?.label
-                                            ?.toLowerCase()
-                                            ?.replace("=", "")}
-                                    </i>
-                                </ResText14Regular>
-                            </>
-                        )}
-                    </span>
-                )}
-
-                {labels.length > 0 && (
-                    <div className={"h-start-flex"}>
-                        {labels.map(item => (
-                            <Tag key={"joke-" + item}>{item.toLowerCase()}</Tag>
-                        ))}
-                    </div>
-                )}
-
-                {loggedIn && user?.id && user?.id !== joke?.user?.id && (
-                    <LeaveJokeRatings
-                        joke={joke}
-                        myRating={myRating}
-                        showViewComments={showViewComments}
-                    />
-                )}
-            </div>
+            {cardRatings}
         </Wrapper>
-        // </Link>
     );
+
+    // if (router.pathname.includes("jokes")) return cardWrapper;
+    // return (
+    //     <Link href={`/jokes/${joke?.id}`} className={"full-width"}>
+    //         {cardWrapper}
+    //     </Link>
+    // );
+    return cardWrapper;
 }

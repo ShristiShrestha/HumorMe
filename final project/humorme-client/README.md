@@ -76,7 +76,7 @@ Making jokes just for fun!
 
 - Use above mentioned steps to login/connect to the EC2 instance hosting next js app
 - Use above mentioned steps to copy build content from the local machine to the EC2 instance (inside /app)
-- Remove existing deployed content: `sudo rm -rf /var/www/html/humorme`
+- Remove existing deployed content: `sudo rm -rf /var/www/humorme`
 - Copy the new build content to this apache server: `sudo cp -r ~/app/out /var/www/humorme`
 - Restart your Apache Server: `sudo systemctl restart apache2`
 
