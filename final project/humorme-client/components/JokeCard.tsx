@@ -245,7 +245,7 @@ export default function JokeCard(props: Props) {
                         )}
 
                     {/* your rating */}
-                    {myRating && (
+                    {myRating && loggedIn && user?.id && (
                         <>
                             <Divider type={"vertical"} />
                             <ResText14Regular className={"text-grey3"}>

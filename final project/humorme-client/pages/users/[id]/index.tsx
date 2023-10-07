@@ -52,6 +52,7 @@ const ModalWrapper = styled.div`
     row-gap: 16px;
 `;
 
+// { userData }
 export default function UserProfile() {
     const router = useRouter();
     const dispatch = useDispatch();
@@ -78,6 +79,13 @@ export default function UserProfile() {
             dispatch(fetchUser(id));
         }
     }, [id]);
+
+    // useEffect(() => {
+    //     if (userData?.id) {
+    //         // @ts-ignore
+    //         dispatch(setUser(userData));
+    //     }
+    // }, [userData?.id]);
 
     // useEffect(() => {
     //     const params = {
@@ -251,3 +259,27 @@ export default function UserProfile() {
         </>
     );
 }
+
+// export async function getStaticProps({ params }) {
+//     const { id } = params;
+//     const defaultApi = "http://3.141.47.20:8081";
+//
+//     // Fetch user data based on the 'id' parameter.
+//     // You can make an API request or fetch data from your data source here.
+//     // For example, using the fetch() API or a library like axios.
+//     const response = await fetch(`${defaultApi}/users/${id}`);
+//     const userData = await response.json();
+//
+//     return {
+//         props: {
+//             userData,
+//         },
+//     };
+// }
+//
+// export async function getStaticPaths() {
+//     return {
+//         paths: [],
+//         fallback: true, // Enable fallback behavior
+//     };
+// }
